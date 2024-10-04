@@ -4,18 +4,25 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
-func Index(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"hello": "world",
-	})
+func Ping(c *gin.Context) {
+	c.JSON(http.StatusOK, "pong")
 }
 
 func main() {
-	r := gin.Default()
+	godotenv.Load()
 
-	r.GET("/", Index)
+	r := gin.Default()
+	db, _ := Connect()
+	Migrate(db)
+
+	r.Use(func(c *gin.Context) {
+		c.Set("db", db)
+		c.Next()
+	})
+	r.GET("/ping", Ping)
 
 	r.Run()
 }
