@@ -1,28 +1,23 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
+	"learn-n-grow.dev/m/db"
 )
 
-func Ping(c *gin.Context) {
-	c.JSON(http.StatusOK, "pong")
-}
-
+// @title My magical API
+// @version 1
+// @description Learn & Grow API
+// @basepath /api/v1
 func main() {
 	godotenv.Load()
 
 	r := gin.Default()
-	db, _ := Connect()
-	Migrate(db)
 
-	r.Use(func(c *gin.Context) {
-		c.Set("db", db)
-		c.Next()
-	})
-	r.GET("/ping", Ping)
+	db.Connect()
+	db.Migrate()
 
 	r.Run()
 }

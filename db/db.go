@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"fmt"
@@ -8,8 +8,10 @@ import (
 	"log"
 	"os"
 
-	"learn-n-grow.dev/m/auth"
+	"learn-n-grow.dev/m/auth/models"
 )
+
+var DB *gorm.DB
 
 func Connect() (*gorm.DB, error) {
 	godotenv.Load()
@@ -18,15 +20,19 @@ func Connect() (*gorm.DB, error) {
 	var PASSWORD = os.Getenv("DB_PASSWORD")
 	var DATABASE = os.Getenv("DB_DB")
 	url := fmt.Sprintf("postgresql://%s:%s@0.0.0.0:5432/%s", USERNAME, PASSWORD, DATABASE)
-	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+
+	var err error
+	DB, err = gorm.Open(postgres.Open(url), &gorm.Config{})
+
 	if err != nil {
 		log.Fatal(err)
 		panic("db bad")
 	}
-	return db, err
+
+	return DB, err
 }
 
-func Migrate(db *gorm.DB) {
-	db.AutoMigrate(&auth.User{})
+func Migrate() {
+	DB.AutoMigrate(&auth.User{})
 	fmt.Println("migrated")
 }
