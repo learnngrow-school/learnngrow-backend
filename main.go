@@ -9,6 +9,7 @@ import (
 	_ "learn-n-grow.dev/m/docs"
 	"learn-n-grow.dev/m/db"
 
+	"learn-n-grow.dev/m/auth"
 	"learn-n-grow.dev/m/internal"
 )
 
@@ -27,6 +28,7 @@ func main() {
 	v1 := r.Group("/api/v1")
 
 	internal.AddRoutes(v1)
+	auth.AddRoutes(v1)
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
