@@ -40,7 +40,7 @@ func Register(context *gin.Context) {
 	}
 
 	userGet := auth.UserGet{}
-	copier.Copy(&userGet, &record)
+	copier.Copy(&userGet, &user)
 
 	context.JSON(http.StatusCreated, userGet)
 }
