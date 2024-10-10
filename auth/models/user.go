@@ -6,10 +6,20 @@ import (
 )
 
 type User struct {
-	gorm.Model `json:"-"`
+	gorm.Model `json:"-" copier:"-"`
 	Id         uint   `json:"id" gorm:"primaryKey;autoIncrement:true"`
 	Email      string `json:"email" gorm:"unique;not null"`
-	Password   string `json:"password" gorm:"not null"`
+	Password   string `json:"password" gorm:"not null" copier:"-"`
+}
+
+type UserCreate struct {
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+}
+
+type UserGet struct {
+	Id         uint   `json:"id"`
+	Email      string `json:"email"`
 }
 
 func (user *User) SetHashPassword() error {

@@ -44,7 +44,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "base"
                 ],
                 "summary": "Create user",
                 "parameters": [
@@ -54,16 +54,34 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.User"
+                            "$ref": "#/definitions/auth.UserCreate"
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserGet"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
-        "auth.User": {
+        "auth.UserCreate": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.UserGet": {
             "type": "object",
             "properties": {
                 "email": {
@@ -71,9 +89,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
-                },
-                "password": {
-                    "type": "string"
                 }
             }
         }

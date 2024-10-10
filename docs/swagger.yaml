@@ -1,13 +1,18 @@
 basePath: /api/v1
 definitions:
-  auth.User:
+  auth.UserCreate:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  auth.UserGet:
     properties:
       email:
         type: string
       id:
         type: integer
-      password:
-        type: string
     type: object
 info:
   contact: {}
@@ -62,11 +67,15 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/auth.User'
+          $ref: '#/definitions/auth.UserCreate'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.UserGet'
       summary: Create user
       tags:
-      - auth
+      - base
 swagger: "2.0"
