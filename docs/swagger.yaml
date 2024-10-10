@@ -1,0 +1,72 @@
+basePath: /api/v1
+definitions:
+  auth.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Learn & Grow API
+  title: My magical API
+  version: "1"
+paths:
+  /ping:
+    get:
+      description: |-
+        In the realm of code where data flows,
+        A whisper travels where the network goes.
+        With a simple command, a heartbeat is sent,
+        To check the connection, to see where it went.
+
+        "Ping," it calls, like a friendly chime,
+        A request for response, a dance through time.
+        From client to server, a message takes flight,
+        In packets it journeys, through day and through night.
+
+        "Are you there?" it asks, with a digital sigh,
+        A promise of data, a link to the sky.
+        The echo returns, a confirmation so sweet,
+        A symphony of bytes, where two systems meet.
+
+        In the world of APIs, where services blend,
+        Ping is the guardian, the reliable friend.
+        It measures the distance, the latency's grace,
+        A pulse of the network, a test of the space.
+
+        So here’s to the ping, in its silent decree,
+        A bridge in the ether, connecting you and me.
+        With each little packet, a story unfolds,
+        In the language of tech, where the future beholds.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Ping API
+      tags:
+      - base
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.User'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create user
+      tags:
+      - auth
+swagger: "2.0"

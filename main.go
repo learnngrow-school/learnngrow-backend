@@ -5,6 +5,9 @@ import (
 	"github.com/joho/godotenv"
 
 	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "learn-n-grow.dev/m/docs"
+	"learn-n-grow.dev/m/db"
 
 	"learn-n-grow.dev/m/internal"
 )
@@ -24,6 +27,8 @@ func main() {
 	v1 := r.Group("/api/v1")
 
 	internal.AddRoutes(v1)
+
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run()
 }
