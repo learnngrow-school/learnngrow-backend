@@ -6,8 +6,8 @@ import (
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "learn-n-grow.dev/m/docs"
 	"learn-n-grow.dev/m/db"
+	_ "learn-n-grow.dev/m/docs"
 
 	"learn-n-grow.dev/m/auth"
 	"learn-n-grow.dev/m/internal"

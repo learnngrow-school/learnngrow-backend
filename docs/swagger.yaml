@@ -14,12 +14,40 @@ definitions:
       id:
         type: integer
     type: object
+  auth.UserLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
 info:
   contact: {}
   description: Learn & Grow API
   title: My magical API
   version: "1"
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.UserGet'
+      summary: Log in user, issue JWT into Cookie
+      tags:
+      - base
   /ping:
     get:
       description: |-
