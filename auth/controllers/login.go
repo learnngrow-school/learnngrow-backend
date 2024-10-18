@@ -8,6 +8,7 @@ import (
 	// "github.com/jinzhu/copier"
 
 	"learn-n-grow.dev/m/auth/models"
+	jwtUtil "learn-n-grow.dev/m/auth/utils"
 	"learn-n-grow.dev/m/db"
 	"learn-n-grow.dev/m/utils"
 )
@@ -20,30 +21,37 @@ import (
 // @tags base
 // @success 200 {object} auth.UserGet
 // @router /login [post]
-func Login(context *gin.Context) {
+func Login(c *gin.Context) {
 	var loginData auth.UserLogin
 
 	// TODO: check the binded struct type
-	if err := context.ShouldBindJSON(&loginData); err != nil {
-		utils.Throw(context, http.StatusBadRequest, err)
+	if err := c.ShouldBindJSON(&loginData); err != nil {
+		utils.Throw(c, http.StatusBadRequest, err)
 		return
 	}
 
 	var record auth.User
-	println(loginData.Email)
 
 	err := db.DB.Model(&auth.User{}).Where("email = ?", loginData.Email).First(&record).Error
 
 	if err != nil {
 		err := errors.New("User not found")
-		utils.Throw(context, http.StatusUnauthorized, err)
+		utils.Throw(c, http.StatusUnauthorized, err)
 		return
 	}
 
 	if err := record.CheckPassword(loginData.Password); err != nil {
-		utils.Throw(context, http.StatusInternalServerError, err)
+		utils.Throw(c, http.StatusInternalServerError, err)
 		return
 	}
 
-	context.JSON(http.StatusAccepted, "ok")
+	println(record.Email)
+	jwt, err := jwtUtil.Issue(record.Email)
+	if err != nil {
+		utils.Throw(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	c.SetCookie("token", jwt, int(jwtUtil.ExpTime), "/", "localhost", false, true)
+	c.JSON(http.StatusAccepted, "ok")
 }
