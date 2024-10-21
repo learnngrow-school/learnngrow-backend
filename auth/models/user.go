@@ -13,13 +13,18 @@ type User struct {
 }
 
 type UserCreate struct {
-	Email      string `json:"email"`
-	Password   string `json:"password"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type UserLogin struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type UserGet struct {
-	Id         uint   `json:"id"`
-	Email      string `json:"email"`
+	Id    uint   `json:"id"`
+	Email string `json:"email"`
 }
 
 func (user *User) SetHashPassword() error {
@@ -31,4 +36,8 @@ func (user *User) SetHashPassword() error {
 
 	user.Password = string(hashed)
 	return nil
+}
+
+func (user *User) CheckPassword(password string) error {
+	return auth.Check(password, user.Password)
 }
