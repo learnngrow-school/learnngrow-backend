@@ -9,7 +9,7 @@ create_tmux_session() {
 		send-keys "sh ./run.sh" C-m \; \
 		new-window -n "Dev" \; \
 		send-keys "nvim main.go" C-m \; \
-		split-window -v \; \
+		split-window -v \;
 }
 
 if ! tmux has-session -t "learnngrow" 2>/dev/null; then
