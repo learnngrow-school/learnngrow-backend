@@ -18,8 +18,8 @@ func Connect() (*gorm.DB, error) {
 
 	var USERNAME = os.Getenv("DB_USER")
 	var PASSWORD = os.Getenv("DB_PASSWORD")
-	var DATABASE = os.Getenv("DB_DB")
-	url := fmt.Sprintf("postgresql://%s:%s@0.0.0.0:5432/%s", USERNAME, PASSWORD, DATABASE)
+	var DATABASE = os.Getenv("DB_DATABASE")
+	url := fmt.Sprintf("postgresql://%s:%s@db:5432/%s", USERNAME, PASSWORD, DATABASE)
 
 	var err error
 	DB, err = gorm.Open(postgres.Open(url), &gorm.Config{})
