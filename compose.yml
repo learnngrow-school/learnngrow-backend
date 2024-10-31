@@ -3,9 +3,25 @@ services:
     env_file: ".env"
     image: 'postgres:16.4-alpine'
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
+    networks:
+      - lng_network
+
+  app:
+    env_file: ".env"
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - lng_network
+
+networks:
+  lng_network:
+    driver: bridge
 
