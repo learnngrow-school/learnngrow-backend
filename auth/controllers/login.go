@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -9,7 +10,9 @@ import (
 
 	"learn-n-grow.dev/m/auth/models"
 	jwtUtil "learn-n-grow.dev/m/auth/utils"
-	"learn-n-grow.dev/m/db"
+	// "learn-n-grow.dev/m/db"
+	"learn-n-grow.dev/m/db/repository"
+	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
@@ -30,9 +33,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var record auth.User
+	// var record auth.User
+	var record repository.User
 
-	err := db.DB.Model(&auth.User{}).Where("email = ?", loginData.Email).First(&record).Error
+	// err := db.DB.Model(&auth.User{}).Where("email = ?", loginData.Email).First(&record).Error
+	record, err := internal.Server.Repo.GetUser(context.Background(), loginData.Email)
 
 	if err != nil {
 		err := errors.New("User not found")
@@ -40,12 +45,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if err := record.CheckPassword(loginData.Password); err != nil {
+	if err := auth.CheckPassword(record, loginData.Password); err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return
 	}
 
-	println(record.Email)
 	jwt, err := jwtUtil.Issue(record.Email)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)

@@ -34,7 +34,7 @@ func main() {
 	}
 
 	repo := repository.New(conn)
-	internal.Server = &internal.Config{ Repo: repo }
+	internal.Server = &internal.Config{ Repo: repo, Conn: conn }
 
 	r := gin.Default()
 
