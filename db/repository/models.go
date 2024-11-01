@@ -4,8 +4,64 @@
 
 package repository
 
+import (
+	"github.com/jackc/pgx/v5/pgtype"
+)
+
+type Category struct {
+	ID    int32
+	Title string
+}
+
+type Course struct {
+	ID          int32
+	Title       string
+	Description pgtype.Text
+	Price       int32
+	Year        pgtype.Int2
+	CategoryID  int32
+	SubjectID   int32
+}
+
+type CourseReview struct {
+	ID         int32
+	Rating     int16
+	Details    pgtype.Text
+	AuthorName string
+	CourseID   pgtype.Int4
+}
+
+type CoursesTeacher struct {
+	CourseID  int32
+	TeacherID int32
+}
+
+type Subject struct {
+	ID    int32
+	Title string
+}
+
+type Teacher struct {
+	UserID     int32
+	SubjectIds []int32
+	Biography  pgtype.Text
+}
+
+type TeacherReview struct {
+	ID         int32
+	Rating     int16
+	Details    pgtype.Text
+	AuthorName string
+	TeacherID  pgtype.Int4
+}
+
 type User struct {
-	ID       int32
-	Email    string
-	Password []byte
+	ID          int32
+	Email       string
+	Password    []byte
+	IsTeacher   pgtype.Bool
+	IsSuperuser pgtype.Bool
+	FirstName   string
+	MiddleName  pgtype.Text
+	LastName    string
 }

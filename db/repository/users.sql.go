@@ -13,7 +13,7 @@ const createUser = `-- name: CreateUser :one
 INSERT INTO users (email, PASSWORD)
     VALUES ($1, $2)
 RETURNING
-    id, email, password
+    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name
 `
 
 type CreateUserParams struct {
@@ -24,13 +24,22 @@ type CreateUserParams struct {
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRow(ctx, createUser, arg.Email, arg.Password)
 	var i User
-	err := row.Scan(&i.ID, &i.Email, &i.Password)
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Password,
+		&i.IsTeacher,
+		&i.IsSuperuser,
+		&i.FirstName,
+		&i.MiddleName,
+		&i.LastName,
+	)
 	return i, err
 }
 
 const getUser = `-- name: GetUser :one
 SELECT
-    id, email, password
+    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name
 FROM
     users
 WHERE
@@ -41,6 +50,15 @@ LIMIT 1
 func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, email)
 	var i User
-	err := row.Scan(&i.ID, &i.Email, &i.Password)
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Password,
+		&i.IsTeacher,
+		&i.IsSuperuser,
+		&i.FirstName,
+		&i.MiddleName,
+		&i.LastName,
+	)
 	return i, err
 }
