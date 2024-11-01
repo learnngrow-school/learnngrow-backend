@@ -1,17 +1,9 @@
 package auth
 
 import (
-	// "gorm.io/gorm"
 	auth "learn-n-grow.dev/m/auth/utils"
 	"learn-n-grow.dev/m/db/repository"
 )
-
-// type User struct {
-// 	gorm.Model `json:"-" copier:"-"`
-// 	Id         uint   `json:"id" gorm:"primaryKey;autoIncrement:true"`
-// 	Email      string `json:"email" gorm:"unique;not null"`
-// 	Password   string `json:"password" gorm:"not null" copier:"-"`
-// }
 
 type UserCreate struct {
 	Email    string `json:"email"`

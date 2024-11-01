@@ -11,7 +11,6 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	// "learn-n-grow.dev/m/db"
 	_ "learn-n-grow.dev/m/docs"
 	"learn-n-grow.dev/m/db/repository"
 
@@ -37,9 +36,6 @@ func main() {
 	internal.Server = &internal.Config{ Repo: repo, Conn: conn }
 
 	r := gin.Default()
-
-	// db.Connect()
-	// db.Migrate()
 
 	v1 := r.Group("/api/v1")
 

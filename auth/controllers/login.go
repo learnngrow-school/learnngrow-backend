@@ -10,7 +10,6 @@ import (
 
 	"learn-n-grow.dev/m/auth/models"
 	jwtUtil "learn-n-grow.dev/m/auth/utils"
-	// "learn-n-grow.dev/m/db"
 	"learn-n-grow.dev/m/db/repository"
 	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
@@ -27,16 +26,13 @@ import (
 func Login(c *gin.Context) {
 	var loginData auth.UserLogin
 
-	// TODO: check the binded struct type
 	if err := c.ShouldBindJSON(&loginData); err != nil {
 		utils.Throw(c, http.StatusBadRequest, err)
 		return
 	}
 
-	// var record auth.User
 	var record repository.User
 
-	// err := db.DB.Model(&auth.User{}).Where("email = ?", loginData.Email).First(&record).Error
 	record, err := internal.Server.Repo.GetUser(context.Background(), loginData.Email)
 
 	if err != nil {
