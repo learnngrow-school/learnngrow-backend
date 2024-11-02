@@ -6,18 +6,24 @@ import (
 )
 
 type UserCreate struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email      string `json:"email" binding:"required"`
+	Password   string `json:"password" binding:"required"`
+	FirstName  string `json:"firstName" binding:"required"`
+	MiddleName string `json:"middleName"`
+	LastName   string  `json:"lastName" binding:"required"`
 }
 
 type UserLogin struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type UserGet struct {
-	Id    uint   `json:"id"`
-	Email string `json:"email"`
+	ID         int32  `json:"id"`
+	Email      string `json:"email"`
+	FirstName  string	`json:"firstName"`
+	MiddleName string `json:"middleName"`
+	LastName   string `json:"lastName"`
 }
 
 func SetHashPassword(params *repository.CreateUserParams, password string) error {

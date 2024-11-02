@@ -25,7 +25,6 @@ import (
 func Register(ctx *gin.Context) {
 	var user auth.UserCreate
 
-	// TODO: check the binded struct type
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		utils.Throw(ctx, http.StatusBadRequest, err)
 		return
@@ -38,13 +37,13 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	_, err := internal.Server.Repo.CreateUser(context.Background(), params)
+	created, err := internal.Server.Repo.CreateUser(context.Background(), params)
 	if err != nil {
 		utils.Throw(ctx, http.StatusInternalServerError, err)
 		return
 	}
 
-	userGet := auth.UserGet{}
+	userGet := auth.UserGet{ID: created.ID}
 	copier.Copy(&userGet, &user)
 
 	ctx.JSON(http.StatusCreated, userGet)

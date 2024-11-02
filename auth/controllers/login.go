@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	// "github.com/jinzhu/copier"
 
 	"learn-n-grow.dev/m/auth/models"
 	jwtUtil "learn-n-grow.dev/m/auth/utils"
