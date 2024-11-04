@@ -21,7 +21,7 @@ import (
 // @produce json
 // @param user body auth.UserCreate true "User"
 // @tags base
-// @success 200 {object} auth.UserGet
+// @success 201 {object} auth.UserGet
 // @router /register [post]
 func Register(ctx *gin.Context) {
 	var user auth.UserCreate
