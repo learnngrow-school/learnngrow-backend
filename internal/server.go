@@ -11,4 +11,3 @@ type Config struct {
 }
 
 var Server *Config
-

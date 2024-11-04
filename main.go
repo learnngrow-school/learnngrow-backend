@@ -11,8 +11,8 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "learn-n-grow.dev/m/docs"
 	"learn-n-grow.dev/m/db/repository"
+	_ "learn-n-grow.dev/m/docs"
 
 	"learn-n-grow.dev/m/auth"
 	"learn-n-grow.dev/m/internal"
@@ -33,7 +33,7 @@ func main() {
 	}
 
 	repo := repository.New(conn)
-	internal.Server = &internal.Config{ Repo: repo, Conn: conn }
+	internal.Server = &internal.Config{Repo: repo, Conn: conn}
 
 	r := gin.Default()
 
