@@ -10,7 +10,7 @@ type UserCreate struct {
 	Password   string `json:"password" binding:"required"`
 	FirstName  string `json:"firstName" binding:"required"`
 	MiddleName string `json:"middleName"`
-	LastName   string  `json:"lastName" binding:"required"`
+	LastName   string `json:"lastName" binding:"required"`
 }
 
 type UserLogin struct {
@@ -21,7 +21,7 @@ type UserLogin struct {
 type UserGet struct {
 	ID         int32  `json:"id"`
 	Email      string `json:"email"`
-	FirstName  string	`json:"firstName"`
+	FirstName  string `json:"firstName"`
 	MiddleName string `json:"middleName"`
 	LastName   string `json:"lastName"`
 }

@@ -7,22 +7,35 @@ package repository
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (email, PASSWORD)
-    VALUES ($1, $2)
+INSERT INTO users (email, PASSWORD, is_teacher, first_name, middle_name, last_name)
+    VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING
     id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name
 `
 
 type CreateUserParams struct {
-	Email    string
-	Password []byte
+	Email      string
+	Password   []byte
+	IsTeacher  pgtype.Bool
+	FirstName  string
+	MiddleName pgtype.Text
+	LastName   string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, createUser, arg.Email, arg.Password)
+	row := q.db.QueryRow(ctx, createUser,
+		arg.Email,
+		arg.Password,
+		arg.IsTeacher,
+		arg.FirstName,
+		arg.MiddleName,
+		arg.LastName,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,

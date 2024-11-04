@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jinzhu/copier"
 
 	"learn-n-grow.dev/m/auth/models"
@@ -30,7 +31,8 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	params := repository.CreateUserParams{ Email: user.Email }
+	params := repository.CreateUserParams{IsTeacher: pgtype.Bool{Bool: false, Valid: true}}
+	copier.Copy(&params, &user)
 
 	if err := auth.SetHashPassword(&params, user.Password); err != nil {
 		utils.Throw(ctx, http.StatusInternalServerError, err)

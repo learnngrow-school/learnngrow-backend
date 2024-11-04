@@ -4,15 +4,32 @@ definitions:
     properties:
       email:
         type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      middleName:
+        type: string
       password:
         type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
     type: object
   auth.UserGet:
     properties:
       email:
         type: string
+      firstName:
+        type: string
       id:
         type: integer
+      lastName:
+        type: string
+      middleName:
+        type: string
     type: object
   auth.UserLogin:
     properties:
@@ -20,6 +37,9 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - email
+    - password
     type: object
 info:
   contact: {}
