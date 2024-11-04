@@ -39,13 +39,13 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	created, err := internal.Server.Repo.CreateUser(context.Background(), params)
+	_, err := internal.Server.Repo.CreateUser(context.Background(), params)
 	if err != nil {
 		utils.Throw(ctx, http.StatusInternalServerError, err)
 		return
 	}
 
-	userGet := auth.UserGet{ID: created.ID}
+	userGet := auth.UserGet{}
 	copier.Copy(&userGet, &user)
 
 	ctx.JSON(http.StatusCreated, userGet)
