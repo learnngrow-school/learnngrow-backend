@@ -1,43 +1,42 @@
 package auth
 
 import (
-	"gorm.io/gorm"
 	auth "learn-n-grow.dev/m/auth/utils"
+	"learn-n-grow.dev/m/db/repository"
 )
 
-type User struct {
-	gorm.Model `json:"-" copier:"-"`
-	Id         uint   `json:"id" gorm:"primaryKey;autoIncrement:true"`
-	Email      string `json:"email" gorm:"unique;not null"`
-	Password   string `json:"password" gorm:"not null" copier:"-"`
-}
-
 type UserCreate struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email      string `json:"email" binding:"required"`
+	Password   string `json:"password" binding:"required"`
+	FirstName  string `json:"firstName" binding:"required"`
+	MiddleName string `json:"middleName"`
+	LastName   string `json:"lastName" binding:"required"`
 }
 
 type UserLogin struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type UserGet struct {
-	Id    uint   `json:"id"`
-	Email string `json:"email"`
+	ID         int32  `json:"id"`
+	Email      string `json:"email"`
+	FirstName  string `json:"firstName"`
+	MiddleName string `json:"middleName"`
+	LastName   string `json:"lastName"`
 }
 
-func (user *User) SetHashPassword() error {
-	hashed, err := auth.Hash(user.Password)
+func SetHashPassword(params *repository.CreateUserParams, password string) error {
+	hashed, err := auth.Hash([]byte(password))
 
 	if err != nil {
 		return err
 	}
 
-	user.Password = string(hashed)
+	params.Password = hashed
 	return nil
 }
 
-func (user *User) CheckPassword(password string) error {
+func CheckPassword(user repository.User, password string) error {
 	return auth.Check(password, user.Password)
 }
