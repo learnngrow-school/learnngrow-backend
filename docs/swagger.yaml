@@ -59,8 +59,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "202":
+          description: Accepted
           schema:
             $ref: '#/definitions/auth.UserGet'
       summary: Log in user, issue JWT into Cookie
@@ -117,8 +117,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/auth.UserGet'
       summary: Create user

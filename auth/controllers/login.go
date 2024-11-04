@@ -21,7 +21,7 @@ import (
 // @produce json
 // @param user body auth.UserLogin true "User"
 // @tags base
-// @success 200 {object} auth.UserGet
+// @success 202 {object} auth.UserGet
 // @router /login [post]
 func Login(c *gin.Context) {
 	var loginData auth.UserLogin
