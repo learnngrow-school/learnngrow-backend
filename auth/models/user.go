@@ -19,7 +19,6 @@ type UserLogin struct {
 }
 
 type UserGet struct {
-	ID         int32  `json:"id"`
 	Email      string `json:"email"`
 	FirstName  string `json:"firstName"`
 	MiddleName string `json:"middleName"`

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
 
 	"learn-n-grow.dev/m/auth/models"
 	jwtUtil "learn-n-grow.dev/m/auth/utils"
@@ -31,9 +32,7 @@ func Login(c *gin.Context) {
 	}
 
 	var record repository.User
-
 	record, err := internal.Server.Repo.GetUser(context.Background(), loginData.Email)
-
 	if err != nil {
 		err := errors.New("User not found")
 		utils.Throw(c, http.StatusUnauthorized, err)
@@ -51,6 +50,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	userGet := auth.UserGet{}
+	copier.Copy(&userGet, &record)
+
 	c.SetCookie("token", jwt, int(jwtUtil.ExpTime), "/", "localhost", false, true)
-	c.JSON(http.StatusAccepted, "ok")
+	c.JSON(http.StatusAccepted, userGet)
 }
