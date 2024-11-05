@@ -66,6 +66,20 @@ paths:
       summary: Log in user, issue JWT into Cookie
       tags:
       - base
+  /me:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.UserGet'
+      summary: Get current user data
+      tags:
+      - base
   /ping:
     get:
       description: |-

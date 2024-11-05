@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"os"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 var (
 	ExpTime int64             = 30 * 24 * 60 * 60
 	method  jwt.SigningMethod = jwt.SigningMethodHS256
+	secret  []byte = []byte(os.Getenv("JWT_SECRET"))
 )
 
 func Issue(email string) (tokenString string, err error) {
@@ -20,7 +22,27 @@ func Issue(email string) (tokenString string, err error) {
 		"sub": email,
 	})
 
-	tokenString, err = token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	tokenString, err = token.SignedString(secret)
 
 	return tokenString, err
+}
+
+func GetData(tokenString string) (email jwt.MapClaims, err error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("signing method is bad")
+		}
+		return secret, nil
+	})
+
+	if err != nil {
+		return
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok || !token.Valid {
+		return nil, errors.New("token invalid somehow")
+	}
+
+	return claims, nil
 }

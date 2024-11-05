@@ -10,5 +10,6 @@ func AddRoutes(r *gin.RouterGroup) {
 	{
 		r.POST("/register", auth.Register)
 		r.POST("/login", auth.Login)
+		r.GET("/me", auth.GetMe)
 	}
 }
