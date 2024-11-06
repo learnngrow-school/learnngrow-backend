@@ -11,6 +11,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"learn-n-grow.dev/m/cmd"
 	"learn-n-grow.dev/m/db/repository"
 	_ "learn-n-grow.dev/m/docs"
 
@@ -35,6 +36,20 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
+func startServer() {
+	r := gin.Default()
+	r.Use(CORSMiddleware())
+
+	v1 := r.Group("/api/v1")
+
+	internal.AddRoutes(v1)
+	auth.AddRoutes(v1)
+
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.Run()
+}
+
 // @title My magical API
 // @version 1
 // @description Learn & Grow API
@@ -52,15 +67,10 @@ func main() {
 	repo := repository.New(conn)
 	internal.Server = &internal.Config{Repo: repo, Conn: conn}
 
-	r := gin.Default()
-	r.Use(CORSMiddleware())
+	if len(os.Args) > 1 && os.Args[1] == "createsuperuser" {
+		cmd.CreateSuperuser(os.Args[2])
+		return
+	}
 
-	v1 := r.Group("/api/v1")
-
-	internal.AddRoutes(v1)
-	auth.AddRoutes(v1)
-
-	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	r.Run()
+	startServer()
 }
