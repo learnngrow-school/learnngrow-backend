@@ -11,6 +11,17 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const createSuperuser = `-- name: CreateSuperuser :exec
+INSERT INTO users (email, PASSWORD, is_teacher, is_superuser, first_name, last_name)
+    VALUES ('admin', $1, FALSE, TRUE, 'Admin', 'Admin')
+ON CONFLICT(email) DO UPDATE SET password = $1
+`
+
+func (q *Queries) CreateSuperuser(ctx context.Context, password []byte) error {
+	_, err := q.db.Exec(ctx, createSuperuser, password)
+	return err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (email, PASSWORD, is_teacher, first_name, middle_name, last_name)
     VALUES ($1, $2, $3, $4, $5, $6)

@@ -13,3 +13,8 @@ INSERT INTO users (email, PASSWORD, is_teacher, first_name, middle_name, last_na
 RETURNING
     *;
 
+-- name: CreateSuperuser :exec
+INSERT INTO users (email, PASSWORD, is_teacher, is_superuser, first_name, last_name)
+    VALUES ('admin', $1, FALSE, TRUE, 'Admin', 'Admin')
+ON CONFLICT(email) DO UPDATE SET password = $1;
+
