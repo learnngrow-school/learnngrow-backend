@@ -16,37 +16,42 @@ import (
 )
 
 // Register Create user
-// @summary Create user
-// @accept json
+// @summary Create user (only superuser)
+// @accept  json
 // @produce json
-// @param user body auth.UserCreate true "User"
-// @tags base
+// @param   user body auth.UserCreate true "User"
+// @tags    Auth
 // @success 201 {object} auth.UserGet
-// @router /register [post]
-func Register(ctx *gin.Context) {
+// @router  /auth/register [post]
+func Register(c *gin.Context) {
+	CreateUser(c, false)
+}
+
+func CreateUser(c *gin.Context, isTeacher bool) {
 	var user auth.UserCreate
 
-	if err := ctx.ShouldBindJSON(&user); err != nil {
-		utils.Throw(ctx, http.StatusBadRequest, err)
+	if err := c.ShouldBindJSON(&user); err != nil {
+		utils.Throw(c, http.StatusBadRequest, err)
 		return
 	}
 
-	params := repository.CreateUserParams{IsTeacher: pgtype.Bool{Bool: false, Valid: true}}
+	params := repository.CreateUserParams{IsTeacher: pgtype.Bool{Bool: isTeacher, Valid: true}}
 	copier.Copy(&params, &user)
 
 	if err := auth.SetHashPassword(&params, user.Password); err != nil {
-		utils.Throw(ctx, http.StatusInternalServerError, err)
+		utils.Throw(c, http.StatusInternalServerError, err)
 		return
 	}
 
 	_, err := internal.Server.Repo.CreateUser(context.Background(), params)
 	if err != nil {
-		utils.Throw(ctx, http.StatusInternalServerError, err)
+		utils.Throw(c, http.StatusInternalServerError, err)
 		return
 	}
 
 	userGet := auth.UserGet{}
 	copier.Copy(&userGet, &user)
 
-	ctx.JSON(http.StatusCreated, userGet)
+	c.JSON(http.StatusCreated, userGet)
 }
+

@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/login": {
+        "/auth/createsuperuser": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -24,7 +24,40 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "base"
+                    "Auth"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
                 ],
                 "summary": "Log in user, issue JWT into Cookie",
                 "parameters": [
@@ -48,7 +81,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/me": {
+        "/auth/me": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -57,12 +90,45 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "base"
+                    "Auth"
                 ],
                 "summary": "Get current user data",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Create user (only superuser)",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/auth.UserGet"
                         }
@@ -90,7 +156,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/register": {
+        "/teachers/": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -101,7 +167,7 @@ const docTemplate = `{
                 "tags": [
                     "base"
                 ],
-                "summary": "Create user",
+                "summary": "Create teacher",
                 "parameters": [
                     {
                         "description": "User",
@@ -113,14 +179,7 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
-                        }
-                    }
-                }
+                "responses": {}
             }
         }
     },

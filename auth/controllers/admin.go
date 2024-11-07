@@ -17,12 +17,12 @@ import (
 
 // Register Create user
 // @summary Create user
-// @accept json
+// @accept  json
 // @produce json
-// @param user body auth.UserCreate true "User"
-// @tags base
+// @param   user body auth.UserCreate true "User"
+// @tags    Auth
 // @success 201 {object} auth.UserGet
-// @router /register [post]
+// @router  /auth/createsuperuser [post]
 func CreateSuperuser(ctx *gin.Context) {
 	var user auth.UserCreate
 

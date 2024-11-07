@@ -6,10 +6,10 @@ import (
 )
 
 func AddRoutes(r *gin.RouterGroup) {
-	r.Group("/auth")
+	g := r.Group("/auth")
 	{
-		r.POST("/register", auth.Register)
-		r.POST("/login", auth.Login)
-		r.GET("/me", auth.GetMe)
+		g.POST("/register", auth.Register)
+		g.POST("/login", auth.Login)
+		g.GET("/me", auth.GetMe)
 	}
 }

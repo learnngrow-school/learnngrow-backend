@@ -45,7 +45,28 @@ info:
   title: My magical API
   version: "1"
 paths:
-  /login:
+  /auth/createsuperuser:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/auth.UserGet'
+      summary: Create user
+      tags:
+      - Auth
+  /auth/login:
     post:
       consumes:
       - application/json
@@ -65,8 +86,8 @@ paths:
             $ref: '#/definitions/auth.UserGet'
       summary: Log in user, issue JWT into Cookie
       tags:
-      - base
-  /me:
+      - Auth
+  /auth/me:
     get:
       consumes:
       - application/json
@@ -79,7 +100,28 @@ paths:
             $ref: '#/definitions/auth.UserGet'
       summary: Get current user data
       tags:
-      - base
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/auth.UserGet'
+      summary: Create user (only superuser)
+      tags:
+      - Auth
   /ping:
     get:
       description: |-
@@ -117,7 +159,7 @@ paths:
       summary: Ping API
       tags:
       - base
-  /register:
+  /teachers/:
     post:
       consumes:
       - application/json
@@ -130,12 +172,8 @@ paths:
           $ref: '#/definitions/auth.UserCreate'
       produces:
       - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/auth.UserGet'
-      summary: Create user
+      responses: {}
+      summary: Create teacher
       tags:
       - base
 swagger: "2.0"
