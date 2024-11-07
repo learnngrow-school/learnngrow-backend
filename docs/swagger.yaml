@@ -39,6 +39,29 @@ definitions:
     - email
     - password
     type: object
+  courses.CourseCreate:
+    properties:
+      categoryId:
+        type: integer
+      description:
+        type: string
+      grade:
+        type: integer
+      price:
+        type: integer
+      subjectId:
+        type: integer
+      title:
+        type: string
+    required:
+    - categoryId
+    - grade
+    - price
+    - subjectId
+    - title
+    type: object
+  courses.CourseGet:
+    type: object
 info:
   contact: {}
   description: Learn & Grow API
@@ -122,6 +145,27 @@ paths:
       summary: Create user (only superuser)
       tags:
       - Auth
+  /courses/:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/courses.CourseCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/courses.CourseGet'
+      summary: Create a course
+      tags:
+      - Courses
   /ping:
     get:
       description: |-

@@ -136,6 +136,39 @@ const docTemplate = `{
                 }
             }
         },
+        "/courses/": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Create a course",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/courses.CourseCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/courses.CourseGet"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "In the realm of code where data flows,\nA whisper travels where the network goes.\nWith a simple command, a heartbeat is sent,\nTo check the connection, to see where it went.\n\n\"Ping,\" it calls, like a friendly chime,\nA request for response, a dance through time.\nFrom client to server, a message takes flight,\nIn packets it journeys, through day and through night.\n\n\"Are you there?\" it asks, with a digital sigh,\nA promise of data, a link to the sky.\nThe echo returns, a confirmation so sweet,\nA symphony of bytes, where two systems meet.\n\nIn the world of APIs, where services blend,\nPing is the guardian, the reliable friend.\nIt measures the distance, the latency's grace,\nA pulse of the network, a test of the space.\n\nSo here’s to the ping, in its silent decree,\nA bridge in the ether, connecting you and me.\nWith each little packet, a story unfolds,\nIn the language of tech, where the future beholds.",
@@ -241,6 +274,39 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "courses.CourseCreate": {
+            "type": "object",
+            "required": [
+                "categoryId",
+                "grade",
+                "price",
+                "subjectId",
+                "title"
+            ],
+            "properties": {
+                "categoryId": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "grade": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "subjectId": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "courses.CourseGet": {
+            "type": "object"
         }
     }
 }`

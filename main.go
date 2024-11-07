@@ -12,6 +12,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"learn-n-grow.dev/m/cmd"
+	"learn-n-grow.dev/m/courses"
 	"learn-n-grow.dev/m/db/repository"
 	_ "learn-n-grow.dev/m/docs"
 	"learn-n-grow.dev/m/internal/middlewares"
@@ -32,6 +33,7 @@ func startServer() {
 	internal.AddRoutes(v1)
 	auth.AddRoutes(v1)
 	teachers.AddRoutes(v1)
+	courses.AddRoutes(v1)
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
