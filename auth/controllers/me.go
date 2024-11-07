@@ -9,37 +9,33 @@ import (
 	"github.com/jinzhu/copier"
 
 	"learn-n-grow.dev/m/auth/models"
-	jwtUtil "learn-n-grow.dev/m/auth/utils"
 	"learn-n-grow.dev/m/db/repository"
 	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
-// Get current user data
+// GetMe    Get current user data
 // @summary Get current user data
-// @accept json
+// @accept  json
 // @produce json
-// @tags base
+// @tags    Auth
 // @success 200 {object} auth.UserGet
-// @router /me [get]
+// @router  /auth/me [get]
 func GetMe(c *gin.Context) {
 	var err error
 
-	token, err := c.Cookie("token")
-	if err != nil {
-		utils.Throw(c, http.StatusUnauthorized, err)
-	}
-	
-	jwtClaims, err := jwtUtil.GetData(token)
-	if err != nil {
-		c.SetCookie("token", "", -1, "/", "localhost", false, true)
-		utils.Throw(c, http.StatusUnauthorized, err)
+	email, jwtIsSet := c.Get("x-email")
+	if !jwtIsSet {
+		err, hasErr := c.Get("x-jwt-err")
+		if !hasErr {
+			panic("\n\nNo cookie but no jwt error set\n")
+		}
+		utils.Throw(c, http.StatusUnauthorized, err.(error))
 		return
 	}
-	email := jwtClaims["sub"].(string)
 
 	var record repository.User
-	record, err = internal.Server.Repo.GetUser(context.Background(), email)
+	record, err = internal.Server.Repo.GetUser(context.Background(), email.(string))
 	if err != nil {
 		err := errors.New("No such user found")
 		utils.Throw(c, http.StatusUnauthorized, err)

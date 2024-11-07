@@ -15,14 +15,14 @@ import (
 	"learn-n-grow.dev/m/utils"
 )
 
-// Login Log in user, issue JWT
+// Login    Log in user, issue JWT
 // @summary Log in user, issue JWT into Cookie
-// @accept json
+// @accept  json
 // @produce json
-// @param user body auth.UserLogin true "User"
-// @tags base
+// @param   user body auth.UserLogin true "User"
+// @tags    Auth
 // @success 202 {object} auth.UserGet
-// @router /login [post]
+// @router  /auth/login [post]
 func Login(c *gin.Context) {
 	var loginData auth.UserLogin
 
