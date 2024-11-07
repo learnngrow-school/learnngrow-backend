@@ -47,3 +47,48 @@ func (q *Queries) CreateCourse(ctx context.Context, arg CreateCourseParams) (Cou
 	)
 	return i, err
 }
+
+const getAllCourses = `-- name: GetAllCourses :many
+SELECT c.id, c.title, c.description, c.price, c.year, c.category_id, c.subject_id, ct.id, ct.title, sb.id, sb.title FROM courses AS C
+LEFT JOIN categories AS CT ON category_id = CT.id
+LEFT JOIN subjects AS SB ON subject_id = SB.id
+ORDER BY C.id
+`
+
+type GetAllCoursesRow struct {
+	Course   Course
+	Category Category
+	Subject  Subject
+}
+
+func (q *Queries) GetAllCourses(ctx context.Context) ([]GetAllCoursesRow, error) {
+	rows, err := q.db.Query(ctx, getAllCourses)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllCoursesRow
+	for rows.Next() {
+		var i GetAllCoursesRow
+		if err := rows.Scan(
+			&i.Course.ID,
+			&i.Course.Title,
+			&i.Course.Description,
+			&i.Course.Price,
+			&i.Course.Year,
+			&i.Course.CategoryID,
+			&i.Course.SubjectID,
+			&i.Category.ID,
+			&i.Category.Title,
+			&i.Subject.ID,
+			&i.Subject.Title,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

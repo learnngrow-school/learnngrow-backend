@@ -18,9 +18,9 @@ import (
 // @summary Create a course
 // @accept  json
 // @produce json
-// @param   user body courses.CourseCreate true "User"
+// @param   user body courses.CourseCreate true "Course"
 // @tags    Courses
-// @success 201 {object} courses.CourseGet
+// @success 201 {object} courses.Course
 // @router  /courses/ [post]
 func CreateCourse(c *gin.Context) {
 	email, emailIsSet := c.Get("x-email")

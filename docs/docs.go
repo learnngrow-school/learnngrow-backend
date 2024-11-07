@@ -15,39 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/createsuperuser": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Create user",
-                "parameters": [
-                    {
-                        "description": "User",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.UserCreate"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
-                        }
-                    }
-                }
-            }
-        },
         "/auth/login": {
             "post": {
                 "consumes": [
@@ -137,6 +104,29 @@ const docTemplate = `{
             }
         },
         "/courses/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Gets All courses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/courses.CourseWithData"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -150,7 +140,7 @@ const docTemplate = `{
                 "summary": "Create a course",
                 "parameters": [
                     {
-                        "description": "User",
+                        "description": "Course",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -163,7 +153,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/courses.CourseGet"
+                            "$ref": "#/definitions/courses.Course"
                         }
                     }
                 }
@@ -198,7 +188,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "base"
+                    "Teachers"
                 ],
                 "summary": "Create teacher",
                 "parameters": [
@@ -275,6 +265,36 @@ const docTemplate = `{
                 }
             }
         },
+        "courses.Category": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "courses.Course": {
+            "type": "object",
+            "required": [
+                "grade",
+                "price",
+                "title"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "grade": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "courses.CourseCreate": {
             "type": "object",
             "required": [
@@ -286,6 +306,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "categoryId": {
+                    "description": "Title       string ` + "`" + `json:\"title\" binding:\"required\"` + "`" + `\nDescription string ` + "`" + `json:\"description\" copier:\"-\"` + "`" + `\nPrice       int32 ` + "`" + `json:\"price\" binding:\"required\"` + "`" + `\nYear        int16 ` + "`" + `json:\"grade\" binding:\"required\" copier:\"-\"` + "`" + `",
                     "type": "integer"
                 },
                 "description": {
@@ -305,8 +326,27 @@ const docTemplate = `{
                 }
             }
         },
-        "courses.CourseGet": {
-            "type": "object"
+        "courses.CourseWithData": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/courses.Category"
+                },
+                "course": {
+                    "$ref": "#/definitions/courses.Course"
+                },
+                "subject": {
+                    "$ref": "#/definitions/courses.Subject"
+                }
+            }
+        },
+        "courses.Subject": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`

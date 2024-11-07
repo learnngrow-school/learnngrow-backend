@@ -39,9 +39,34 @@ definitions:
     - email
     - password
     type: object
+  courses.Category:
+    properties:
+      title:
+        type: string
+    type: object
+  courses.Course:
+    properties:
+      description:
+        type: string
+      grade:
+        type: integer
+      price:
+        type: integer
+      title:
+        type: string
+    required:
+    - grade
+    - price
+    - title
+    type: object
   courses.CourseCreate:
     properties:
       categoryId:
+        description: |-
+          Title       string `json:"title" binding:"required"`
+          Description string `json:"description" copier:"-"`
+          Price       int32 `json:"price" binding:"required"`
+          Year        int16 `json:"grade" binding:"required" copier:"-"`
         type: integer
       description:
         type: string
@@ -60,7 +85,19 @@ definitions:
     - subjectId
     - title
     type: object
-  courses.CourseGet:
+  courses.CourseWithData:
+    properties:
+      category:
+        $ref: '#/definitions/courses.Category'
+      course:
+        $ref: '#/definitions/courses.Course'
+      subject:
+        $ref: '#/definitions/courses.Subject'
+    type: object
+  courses.Subject:
+    properties:
+      title:
+        type: string
     type: object
 info:
   contact: {}
@@ -68,27 +105,6 @@ info:
   title: My magical API
   version: "1"
 paths:
-  /auth/createsuperuser:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: User
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/auth.UserCreate'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/auth.UserGet'
-      summary: Create user
-      tags:
-      - Auth
   /auth/login:
     post:
       consumes:
@@ -146,11 +162,26 @@ paths:
       tags:
       - Auth
   /courses/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/courses.CourseWithData'
+            type: array
+      summary: Gets All courses
+      tags:
+      - Courses
     post:
       consumes:
       - application/json
       parameters:
-      - description: User
+      - description: Course
         in: body
         name: user
         required: true
@@ -162,7 +193,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/courses.CourseGet'
+            $ref: '#/definitions/courses.Course'
       summary: Create a course
       tags:
       - Courses
@@ -219,5 +250,5 @@ paths:
       responses: {}
       summary: Create teacher
       tags:
-      - base
+      - Teachers
 swagger: "2.0"

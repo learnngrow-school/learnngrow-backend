@@ -14,7 +14,7 @@ import (
 // @accept  json
 // @produce json
 // @param   user body auth.UserCreate true "User"
-// @tags    base
+// @tags    Teachers
 // success  201 {object} auth.UserGet
 // @router  /teachers/ [post]
 func Create(c *gin.Context) {
