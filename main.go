@@ -14,36 +14,24 @@ import (
 	"learn-n-grow.dev/m/cmd"
 	"learn-n-grow.dev/m/db/repository"
 	_ "learn-n-grow.dev/m/docs"
+	"learn-n-grow.dev/m/internal/middlewares"
+	"learn-n-grow.dev/m/teachers"
 
 	"learn-n-grow.dev/m/auth"
 	"learn-n-grow.dev/m/internal"
 )
 
-// https://stackoverflow.com/a/48763475
-func CORSMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	}
-}
 
 func startServer() {
 	r := gin.Default()
-	r.Use(CORSMiddleware())
+	r.Use(middlewares.CORSMiddleware())
+	r.Use(middlewares.JWTMiddleware())
 
 	v1 := r.Group("/api/v1")
 
 	internal.AddRoutes(v1)
 	auth.AddRoutes(v1)
+	teachers.AddRoutes(v1)
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

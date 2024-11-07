@@ -8,7 +8,7 @@
     },
     "basePath": "/api/v1",
     "paths": {
-        "/login": {
+        "/auth/createsuperuser": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -17,7 +17,40 @@
                     "application/json"
                 ],
                 "tags": [
-                    "base"
+                    "Auth"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
                 ],
                 "summary": "Log in user, issue JWT into Cookie",
                 "parameters": [
@@ -41,7 +74,7 @@
                 }
             }
         },
-        "/me": {
+        "/auth/me": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -50,12 +83,45 @@
                     "application/json"
                 ],
                 "tags": [
-                    "base"
+                    "Auth"
                 ],
                 "summary": "Get current user data",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Create user (only superuser)",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/auth.UserGet"
                         }
@@ -83,7 +149,7 @@
                 }
             }
         },
-        "/register": {
+        "/teachers/": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -94,7 +160,7 @@
                 "tags": [
                     "base"
                 ],
-                "summary": "Create user",
+                "summary": "Create teacher",
                 "parameters": [
                     {
                         "description": "User",
@@ -106,14 +172,7 @@
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
-                        }
-                    }
-                }
+                "responses": {}
             }
         }
     },
