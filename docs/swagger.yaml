@@ -99,6 +99,22 @@ definitions:
       title:
         type: string
     type: object
+  reviews.ReviewCreate:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
+    type: object
+  reviews.ReviewGet:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
+      id:
+        type: integer
+    type: object
   teachers.Teacher:
     properties:
       biography:
@@ -270,6 +286,27 @@ paths:
       summary: Ping API
       tags:
       - base
+  /reviews:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/reviews.ReviewCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/reviews.ReviewGet'
+      summary: Create review
+      tags:
+      - Reviews
   /teachers/:
     get:
       consumes:
