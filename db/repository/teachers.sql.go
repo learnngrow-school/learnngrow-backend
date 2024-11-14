@@ -42,3 +42,47 @@ func (q *Queries) CreateTeacher(ctx context.Context, arg CreateTeacherParams) (i
 	err := row.Scan(&user_id)
 	return user_id, err
 }
+
+const getAllTeachers = `-- name: GetAllTeachers :many
+SELECT u.id, u.email, u.password, u.is_teacher, u.is_superuser, u.first_name, u.middle_name, u.last_name, t.user_id, t.subject_ids, t.biography
+FROM teachers AS T
+LEFT JOIN users AS U ON T.user_id = U.id
+ORDER BY T.user_id
+`
+
+type GetAllTeachersRow struct {
+	User    User
+	Teacher Teacher
+}
+
+func (q *Queries) GetAllTeachers(ctx context.Context) ([]GetAllTeachersRow, error) {
+	rows, err := q.db.Query(ctx, getAllTeachers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllTeachersRow
+	for rows.Next() {
+		var i GetAllTeachersRow
+		if err := rows.Scan(
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Password,
+			&i.User.IsTeacher,
+			&i.User.IsSuperuser,
+			&i.User.FirstName,
+			&i.User.MiddleName,
+			&i.User.LastName,
+			&i.Teacher.UserID,
+			&i.Teacher.SubjectIds,
+			&i.Teacher.Biography,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

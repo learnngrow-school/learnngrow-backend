@@ -8,3 +8,9 @@ INSERT INTO teachers (user_id)
 	VALUES ((SELECT id FROM new_user))
 RETURNING user_id;
 
+-- name: GetAllTeachers :many
+SELECT sqlc.embed(U), sqlc.embed(T)
+FROM teachers AS T
+LEFT JOIN users AS U ON T.user_id = U.id
+ORDER BY T.user_id;
+

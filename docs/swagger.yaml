@@ -99,6 +99,22 @@ definitions:
       title:
         type: string
     type: object
+  teachers.Teacher:
+    properties:
+      biography:
+        type: string
+      subjectIds:
+        items:
+          type: integer
+        type: array
+    type: object
+  teachers.TeacherGet:
+    properties:
+      teacherData:
+        $ref: '#/definitions/teachers.Teacher'
+      userData:
+        $ref: '#/definitions/auth.UserGet'
+    type: object
 info:
   contact: {}
   description: Learn & Grow API
@@ -255,6 +271,21 @@ paths:
       tags:
       - base
   /teachers/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/teachers.TeacherGet'
+            type: array
+      summary: Get all teachers
+      tags:
+      - Teachers
     post:
       consumes:
       - application/json

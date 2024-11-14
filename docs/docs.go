@@ -211,6 +211,29 @@ const docTemplate = `{
             }
         },
         "/teachers/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Teachers"
+                ],
+                "summary": "Get all teachers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/teachers.TeacherGet"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -376,6 +399,31 @@ const docTemplate = `{
             "properties": {
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "teachers.Teacher": {
+            "type": "object",
+            "properties": {
+                "biography": {
+                    "type": "string"
+                },
+                "subjectIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "teachers.TeacherGet": {
+            "type": "object",
+            "properties": {
+                "teacherData": {
+                    "$ref": "#/definitions/teachers.Teacher"
+                },
+                "userData": {
+                    "$ref": "#/definitions/auth.UserGet"
                 }
             }
         }
