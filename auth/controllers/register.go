@@ -16,7 +16,7 @@ import (
 )
 
 // Register Create user
-// @summary Create user (only superuser)
+// @summary Create user
 // @accept  json
 // @produce json
 // @param   user body auth.UserCreate true "User"

@@ -10,5 +10,6 @@ func AddRoutes(r *gin.RouterGroup) {
 	{
 		g.POST("/", controllers.CreateCourse)
 		g.GET("/", controllers.GetAllCourses)
+		g.GET("/:id", controllers.GetOneCourse)
 	}
 }
