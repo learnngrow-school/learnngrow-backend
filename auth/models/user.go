@@ -25,15 +25,14 @@ type UserGet struct {
 	LastName   string `json:"lastName"`
 }
 
-func SetHashPassword(params *repository.CreateUserParams, password string) error {
-	hashed, err := auth.Hash([]byte(password))
+func Hash[T repository.CreateUserParams | repository.CreateTeacherParams] (params *T, password string) (hashed []byte, err error) {
+	hashed, err = auth.Hash([]byte(password))
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	params.Password = hashed
-	return nil
+	return hashed, nil
 }
 
 func CheckPassword(user repository.User, password string) error {

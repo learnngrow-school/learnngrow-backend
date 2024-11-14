@@ -9,5 +9,7 @@ func AddRoutes(r *gin.RouterGroup) {
 	g := r.Group("/teachers")
 	{
 		g.POST("/", teachers.Create)
+		g.GET("/", teachers.GetAll)
+		g.GET("/:id", teachers.GetOne)
 	}
 }

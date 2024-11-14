@@ -211,6 +211,29 @@ const docTemplate = `{
             }
         },
         "/teachers/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Teachers"
+                ],
+                "summary": "Get all teachers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/teachers.TeacherGet"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -234,6 +257,37 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {}
+            }
+        },
+        "/teachers/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Teachers"
+                ],
+                "summary": "Get teacher by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Teacher ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/teachers.TeacherGet"
+                        }
+                    }
+                }
             }
         }
     },
@@ -376,6 +430,31 @@ const docTemplate = `{
             "properties": {
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "teachers.Teacher": {
+            "type": "object",
+            "properties": {
+                "biography": {
+                    "type": "string"
+                },
+                "subjectIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "teachers.TeacherGet": {
+            "type": "object",
+            "properties": {
+                "teacherData": {
+                    "$ref": "#/definitions/teachers.Teacher"
+                },
+                "userData": {
+                    "$ref": "#/definitions/auth.UserGet"
                 }
             }
         }

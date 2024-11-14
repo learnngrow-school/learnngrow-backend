@@ -28,6 +28,7 @@ func Register(c *gin.Context) {
 }
 
 func CreateUser(c *gin.Context, isTeacher bool) {
+	var err error
 	var user auth.UserCreate
 
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -39,12 +40,12 @@ func CreateUser(c *gin.Context, isTeacher bool) {
 	params := repository.CreateUserParams{IsTeacher: pgtype.Bool{Bool: isTeacher, Valid: true}}
 	copier.Copy(&params, &user)
 
-	if err := auth.SetHashPassword(&params, user.Password); err != nil {
+	if params.Password, err = auth.Hash(&params, user.Password); err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return
 	}
 
-	_, err := internal.Server.Repo.CreateUser(context.Background(), params)
+	_, err = internal.Server.Repo.CreateUser(context.Background(), params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return
