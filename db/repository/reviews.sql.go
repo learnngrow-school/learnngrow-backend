@@ -26,3 +26,29 @@ func (q *Queries) CreateReview(ctx context.Context, arg CreateReviewParams) (Sch
 	err := row.Scan(&i.ID, &i.Details, &i.AuthorName)
 	return i, err
 }
+
+const getAllSchoolReviews = `-- name: GetAllSchoolReviews :many
+SELECT id, details, author_name
+FROM school_reviews
+ORDER BY id
+`
+
+func (q *Queries) GetAllSchoolReviews(ctx context.Context) ([]SchoolReview, error) {
+	rows, err := q.db.Query(ctx, getAllSchoolReviews)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SchoolReview
+	for rows.Next() {
+		var i SchoolReview
+		if err := rows.Scan(&i.ID, &i.Details, &i.AuthorName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

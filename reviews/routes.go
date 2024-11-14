@@ -9,5 +9,6 @@ func AddRoutes(r *gin.RouterGroup) {
 	g := r.Group("/")
 	{
 		g.POST("/reviews", reviews.Create)
+		g.GET("/reviews", reviews.GetAll)
 	}
 }

@@ -287,6 +287,21 @@ paths:
       tags:
       - base
   /reviews:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/reviews.ReviewGet'
+            type: array
+      summary: Get all school reviews
+      tags:
+      - Reviews
     post:
       consumes:
       - application/json
