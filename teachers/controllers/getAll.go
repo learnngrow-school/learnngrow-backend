@@ -12,7 +12,7 @@ import (
 	models "learn-n-grow.dev/m/teachers/models"
 )
 
-// GetAll Get all teachers
+// GetAll   Get all teachers
 // @summary Get all teachers
 // @accept  json
 // @produce json
@@ -22,15 +22,10 @@ import (
 func GetAll(c *gin.Context) {
 	teachers, err := internal.Server.Repo.GetAllTeachers(context.Background())
 	if err != nil {
-		utils.Throw(c, 500, err)
+		utils.Throw(c, http.StatusInternalServerError, err)
 	}
 
-	// var teachersRes models.TeachersGet = models.TeachersGet{}
-
-	// fmt.Println(teachers)
-
 	var teachersRes models.TeachersGet
-
 	copier.CopyWithOption(&teachersRes, &teachers, copier.Option{DeepCopy: true})
 
 	c.JSON(http.StatusOK, teachersRes)

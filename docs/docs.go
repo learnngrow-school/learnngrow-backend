@@ -258,6 +258,37 @@ const docTemplate = `{
                 ],
                 "responses": {}
             }
+        },
+        "/teachers/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Teachers"
+                ],
+                "summary": "Get teacher by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Teacher ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/teachers.TeacherGet"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

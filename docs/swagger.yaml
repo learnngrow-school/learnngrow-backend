@@ -302,4 +302,24 @@ paths:
       summary: Create teacher
       tags:
       - Teachers
+  /teachers/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/teachers.TeacherGet'
+      summary: Get teacher by ID
+      tags:
+      - Teachers
 swagger: "2.0"

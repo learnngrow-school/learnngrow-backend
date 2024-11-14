@@ -14,3 +14,9 @@ FROM teachers AS T
 LEFT JOIN users AS U ON T.user_id = U.id
 ORDER BY T.user_id;
 
+-- name: GetTeacherByID :one
+SELECT sqlc.embed(U), sqlc.embed(T)
+FROM teachers AS T
+LEFT JOIN users AS U ON T.user_id = U.id
+WHERE T.user_id = $1
+LIMIT 1;
