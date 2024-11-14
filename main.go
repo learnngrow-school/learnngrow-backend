@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -36,6 +37,9 @@ func startServer() {
 	courses.AddRoutes(v1)
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/docs", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusPermanentRedirect, "/docs/index.html")
+	})
 
 	r.Run()
 }
