@@ -23,4 +23,4 @@ type CourseWithData struct {
 	Subject  Subject `json:"subject"`
 }
 
-type CoursesGet = []CourseWithData
+type CoursesGet []CourseWithData

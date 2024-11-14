@@ -92,3 +92,36 @@ func (q *Queries) GetAllCourses(ctx context.Context) ([]GetAllCoursesRow, error)
 	}
 	return items, nil
 }
+
+const getCourseById = `-- name: GetCourseById :one
+SELECT c.id, c.title, c.description, c.price, c.year, c.category_id, c.subject_id, ct.id, ct.title, sb.id, sb.title FROM courses AS C
+LEFT JOIN categories AS CT ON category_id = CT.id
+LEFT JOIN subjects AS SB ON subject_id = SB.id
+WHERE C.id = $1
+LIMIT 1
+`
+
+type GetCourseByIdRow struct {
+	Course   Course
+	Category Category
+	Subject  Subject
+}
+
+func (q *Queries) GetCourseById(ctx context.Context, id int32) (GetCourseByIdRow, error) {
+	row := q.db.QueryRow(ctx, getCourseById, id)
+	var i GetCourseByIdRow
+	err := row.Scan(
+		&i.Course.ID,
+		&i.Course.Title,
+		&i.Course.Description,
+		&i.Course.Price,
+		&i.Course.Year,
+		&i.Course.CategoryID,
+		&i.Course.SubjectID,
+		&i.Category.ID,
+		&i.Category.Title,
+		&i.Subject.ID,
+		&i.Subject.Title,
+	)
+	return i, err
+}
