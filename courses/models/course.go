@@ -12,9 +12,9 @@ type CourseCreate struct {
 
 type Course struct {
 	Title       string `json:"title" binding:"required"`
-	Description string `json:"description" copier:"-"`
+	Description string `json:"description"`
 	Price       int32 `json:"price" binding:"required"`
-	Year        int16 `json:"grade" binding:"required" copier:"-"`
+	Year        int16 `json:"grade" binding:"required"`
 }
 
 type CourseWithData struct {
