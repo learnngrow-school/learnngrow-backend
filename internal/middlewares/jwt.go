@@ -11,7 +11,7 @@ func JWTMiddleware() gin.HandlerFunc {
 
 		token, err := c.Cookie("token")
 		if err != nil {
-			c.Set("x-jwt-err", err)
+			c.Set("jwtErr", err)
 			c.Next()
 			return
 		}
@@ -19,13 +19,13 @@ func JWTMiddleware() gin.HandlerFunc {
 		jwtClaims, err := jwtUtils.GetData(token)
 		if err != nil {
 			c.SetCookie("token", "", -1, "/", "localhost", false, true)
-			c.Set("x-jwt-err", err)
+			c.Set("jwtErr", err)
 			c.Next()
 			return
 		}
 		email := jwtClaims["sub"].(string)
 
-		c.Set("x-email", email)
+		c.Set("userEmail", email)
 
 		c.Next()
 	}

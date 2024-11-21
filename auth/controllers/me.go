@@ -24,9 +24,9 @@ import (
 func GetMe(c *gin.Context) {
 	var err error
 
-	email, jwtIsSet := c.Get("x-email")
+	email, jwtIsSet := c.Get("userEmail")
 	if !jwtIsSet {
-		err, hasErr := c.Get("x-jwt-err")
+		err, hasErr := c.Get("jwtErr")
 		if !hasErr {
 			panic("\n\nNo cookie but no jwt error set\n")
 		}

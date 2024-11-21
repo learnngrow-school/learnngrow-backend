@@ -23,7 +23,7 @@ import (
 // @success 201 {object} courses.Course
 // @router  /courses/ [post]
 func CreateCourse(c *gin.Context) {
-	email, emailIsSet := c.Get("x-email")
+	email, emailIsSet := c.Get("userEmail")
 	if !emailIsSet || email != "admin" {
 		utils.Throw(c, http.StatusUnauthorized, errors.New("You are not superuser"))
 		return
