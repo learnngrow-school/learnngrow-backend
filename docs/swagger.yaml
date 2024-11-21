@@ -158,6 +158,18 @@ paths:
       summary: Log in user, issue JWT into Cookie
       tags:
       - Auth
+  /auth/logout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Logs user out (removes token cookie)
+      tags:
+      - Auth
   /auth/me:
     get:
       consumes:

@@ -8,6 +8,7 @@ import (
 type Config struct {
 	Repo *repository.Queries
 	Conn *pgx.Conn
+	Domain string
 }
 
 var Server *Config

@@ -61,7 +61,11 @@ func main() {
 	}
 
 	repo := repository.New(conn)
-	internal.Server = &internal.Config{Repo: repo, Conn: conn}
+	internal.Server = &internal.Config{
+		Repo: repo,
+		Conn: conn,
+		Domain: "localhost",
+	}
 
 	if len(os.Args) > 1 && os.Args[1] == "createsuperuser" {
 		cmd.CreateSuperuser(os.Args[2])

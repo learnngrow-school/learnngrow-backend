@@ -53,6 +53,6 @@ func Login(c *gin.Context) {
 	userGet := auth.UserGet{}
 	copier.Copy(&userGet, &record)
 
-	c.SetCookie("token", jwt, int(jwtUtil.ExpTime), "/", "localhost", false, true)
+	c.SetCookie("token", jwt, int(jwtUtil.ExpTime), "/", internal.Server.Domain, false, true)
 	c.JSON(http.StatusAccepted, userGet)
 }
