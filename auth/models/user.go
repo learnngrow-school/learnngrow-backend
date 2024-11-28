@@ -8,7 +8,7 @@ import (
 )
 
 type UserCreate struct {
-	Email      string `json:"email" binding:"required"`
+	Email      string `json:"phone" binding:"required"`
 	Password   string `json:"password" binding:"required"`
 	FirstName  string `json:"firstName" binding:"required"`
 	MiddleName string `json:"middleName"`
@@ -26,19 +26,19 @@ func (user UserCreate) Validate() error {
 }
 
 type UserLogin struct {
-	Email    string `json:"email" binding:"required"`
+	Email    string `json:"phone" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
 func (user UserLogin) Validate() error {
 	return validation.ValidateStruct(&user,
-		validation.Field(&user.Email, validation.Required, is.Email),
+		validation.Field(&user.Email, validation.Required, is.E164),
 		validation.Field(&user.Password, validation.Required, validation.Length(6, 100)),
 	)
 }
 
 type UserGet struct {
-	Email      string `json:"email"`
+	Email      string `json:"phone"`
 	FirstName  string `json:"firstName"`
 	MiddleName string `json:"middleName"`
 	LastName   string `json:"lastName"`

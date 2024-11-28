@@ -351,15 +351,12 @@ const docTemplate = `{
         "auth.UserCreate": {
             "type": "object",
             "required": [
-                "email",
                 "firstName",
                 "lastName",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "firstName": {
                     "type": "string"
                 },
@@ -370,6 +367,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }
@@ -377,9 +377,6 @@ const docTemplate = `{
         "auth.UserGet": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "firstName": {
                     "type": "string"
                 },
@@ -388,20 +385,23 @@ const docTemplate = `{
                 },
                 "middleName": {
                     "type": "string"
+                },
+                "phone": {
+                    "type": "string"
                 }
             }
         },
         "auth.UserLogin": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phone": {
                     "type": "string"
                 }
             }
@@ -447,7 +447,6 @@ const docTemplate = `{
             ],
             "properties": {
                 "categoryId": {
-                    "description": "Title       string ` + "`" + `json:\"title\" binding:\"required\"` + "`" + `\nDescription string ` + "`" + `json:\"description\" copier:\"-\"` + "`" + `\nPrice       int32 ` + "`" + `json:\"price\" binding:\"required\"` + "`" + `\nYear        int16 ` + "`" + `json:\"grade\" binding:\"required\" copier:\"-\"` + "`" + `",
                     "type": "integer"
                 },
                 "description": {

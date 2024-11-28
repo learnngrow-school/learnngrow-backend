@@ -2,8 +2,6 @@ basePath: /api/v1
 definitions:
   auth.UserCreate:
     properties:
-      email:
-        type: string
       firstName:
         type: string
       lastName:
@@ -12,32 +10,34 @@ definitions:
         type: string
       password:
         type: string
+      phone:
+        type: string
     required:
-    - email
     - firstName
     - lastName
     - password
+    - phone
     type: object
   auth.UserGet:
     properties:
-      email:
-        type: string
       firstName:
         type: string
       lastName:
         type: string
       middleName:
+        type: string
+      phone:
         type: string
     type: object
   auth.UserLogin:
     properties:
-      email:
-        type: string
       password:
         type: string
+      phone:
+        type: string
     required:
-    - email
     - password
+    - phone
     type: object
   courses.Category:
     properties:
@@ -62,11 +62,6 @@ definitions:
   courses.CourseCreate:
     properties:
       categoryId:
-        description: |-
-          Title       string `json:"title" binding:"required"`
-          Description string `json:"description" copier:"-"`
-          Price       int32 `json:"price" binding:"required"`
-          Year        int16 `json:"grade" binding:"required" copier:"-"`
         type: integer
       description:
         type: string
