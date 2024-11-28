@@ -5,7 +5,7 @@ import (
 	jwtUtils "learn-n-grow.dev/m/auth/utils"
 )
 
-func JWTMiddleware() gin.HandlerFunc {
+func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var err error
 

@@ -29,14 +29,10 @@ func Register(c *gin.Context) {
 
 func CreateUser(c *gin.Context, isTeacher bool) {
 	var err error
-	var user auth.UserCreate
 
-	if err := c.ShouldBindJSON(&user); err != nil {
-		utils.Throw(c, http.StatusBadRequest, err)
-		return
-	}
+	data, _ := c.Get("input")
+	user, _ := data.(auth.UserCreate)
 
-	// TODO: check middlename type
 	params := repository.CreateUserParams{IsTeacher: pgtype.Bool{Bool: isTeacher, Valid: true}}
 	copier.Copy(&params, &user)
 

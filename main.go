@@ -27,8 +27,8 @@ import (
 
 func startServer() {
 	r := gin.Default()
-	r.Use(middlewares.CORSMiddleware())
-	r.Use(middlewares.JWTMiddleware())
+	r.Use(middlewares.CORS())
+	r.Use(middlewares.JWT())
 
 	v1 := r.Group("/api/v1")
 

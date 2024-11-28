@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 
-	"learn-n-grow.dev/m/auth/models"
+	auth "learn-n-grow.dev/m/auth/models"
 	jwtUtil "learn-n-grow.dev/m/auth/utils"
 	"learn-n-grow.dev/m/db/repository"
 	"learn-n-grow.dev/m/internal"
@@ -24,12 +24,8 @@ import (
 // @success 202 {object} auth.UserGet
 // @router  /auth/login [post]
 func Login(c *gin.Context) {
-	var loginData auth.UserLogin
-
-	if err := c.ShouldBindJSON(&loginData); err != nil {
-		utils.Throw(c, http.StatusBadRequest, err)
-		return
-	}
+	data, _ := c.Get("input")
+	loginData, _ := data.(auth.UserLogin)
 
 	var record repository.User
 	record, err := internal.Server.Repo.GetUser(context.Background(), loginData.Email)
@@ -40,7 +36,10 @@ func Login(c *gin.Context) {
 	}
 
 	if err := auth.CheckPassword(record, loginData.Password); err != nil {
-		utils.Throw(c, http.StatusInternalServerError, err)
+		utils.Throw(c,
+			http.StatusInternalServerError,
+			errors.New("Wrong password"),
+		)
 		return
 	}
 
