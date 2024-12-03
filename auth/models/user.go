@@ -6,7 +6,7 @@ import (
 )
 
 type UserCreate struct {
-	Email      string `json:"email" binding:"required"`
+	Email      string `json:"phone" binding:"required"`
 	Password   string `json:"password" binding:"required"`
 	FirstName  string `json:"firstName" binding:"required"`
 	MiddleName string `json:"middleName"`
@@ -14,12 +14,12 @@ type UserCreate struct {
 }
 
 type UserLogin struct {
-	Email    string `json:"email" binding:"required"`
+	Email    string `json:"phone" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
 type UserGet struct {
-	Email      string `json:"email"`
+	Email      string `json:"phone"`
 	FirstName  string `json:"firstName"`
 	MiddleName string `json:"middleName"`
 	LastName   string `json:"lastName"`
