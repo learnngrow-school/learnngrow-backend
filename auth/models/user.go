@@ -8,18 +8,18 @@ import (
 type User struct {
 	gorm.Model `json:"-" copier:"-"`
 	Id         uint   `json:"id" gorm:"primaryKey;autoIncrement:true"`
-	Email      string `json:"email" gorm:"unique;not null"`
+	Email      string `json:"phone" gorm:"unique;not null"`
 	Password   string `json:"password" gorm:"not null" copier:"-"`
 }
 
 type UserCreate struct {
-	Email      string `json:"email"`
+	Email      string `json:"phone"`
 	Password   string `json:"password"`
 }
 
 type UserGet struct {
 	Id         uint   `json:"id"`
-	Email      string `json:"email"`
+	Email      string `json:"phone"`
 }
 
 func (user *User) SetHashPassword() error {
