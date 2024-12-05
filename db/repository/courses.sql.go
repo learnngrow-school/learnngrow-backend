@@ -12,9 +12,9 @@ import (
 )
 
 const createCourse = `-- name: CreateCourse :one
-INSERT INTO courses (title, description, price, year, category_id, subject_id)
-	VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, title, description, price, year, category_id, subject_id
+INSERT INTO courses (title, description, price, year, category_id, subject_id, slug)
+	VALUES ($1, $2, $3, $4, $5, $6, $7)
+RETURNING id, title, description, price, year, category_id, subject_id, slug
 `
 
 type CreateCourseParams struct {
@@ -24,6 +24,7 @@ type CreateCourseParams struct {
 	Year        pgtype.Int2
 	CategoryID  int32
 	SubjectID   int32
+	Slug        string
 }
 
 func (q *Queries) CreateCourse(ctx context.Context, arg CreateCourseParams) (Course, error) {
@@ -34,6 +35,7 @@ func (q *Queries) CreateCourse(ctx context.Context, arg CreateCourseParams) (Cou
 		arg.Year,
 		arg.CategoryID,
 		arg.SubjectID,
+		arg.Slug,
 	)
 	var i Course
 	err := row.Scan(
@@ -44,12 +46,13 @@ func (q *Queries) CreateCourse(ctx context.Context, arg CreateCourseParams) (Cou
 		&i.Year,
 		&i.CategoryID,
 		&i.SubjectID,
+		&i.Slug,
 	)
 	return i, err
 }
 
 const getAllCourses = `-- name: GetAllCourses :many
-SELECT c.id, c.title, c.description, c.price, c.year, c.category_id, c.subject_id, ct.id, ct.title, sb.id, sb.title FROM courses AS C
+SELECT c.id, c.title, c.description, c.price, c.year, c.category_id, c.subject_id, c.slug, ct.id, ct.title, sb.id, sb.title FROM courses AS C
 LEFT JOIN categories AS CT ON category_id = CT.id
 LEFT JOIN subjects AS SB ON subject_id = SB.id
 ORDER BY C.id
@@ -78,6 +81,7 @@ func (q *Queries) GetAllCourses(ctx context.Context) ([]GetAllCoursesRow, error)
 			&i.Course.Year,
 			&i.Course.CategoryID,
 			&i.Course.SubjectID,
+			&i.Course.Slug,
 			&i.Category.ID,
 			&i.Category.Title,
 			&i.Subject.ID,
@@ -94,7 +98,7 @@ func (q *Queries) GetAllCourses(ctx context.Context) ([]GetAllCoursesRow, error)
 }
 
 const getCourseById = `-- name: GetCourseById :one
-SELECT c.id, c.title, c.description, c.price, c.year, c.category_id, c.subject_id, ct.id, ct.title, sb.id, sb.title FROM courses AS C
+SELECT c.id, c.title, c.description, c.price, c.year, c.category_id, c.subject_id, c.slug, ct.id, ct.title, sb.id, sb.title FROM courses AS C
 LEFT JOIN categories AS CT ON category_id = CT.id
 LEFT JOIN subjects AS SB ON subject_id = SB.id
 WHERE C.id = $1
@@ -118,6 +122,7 @@ func (q *Queries) GetCourseById(ctx context.Context, id int32) (GetCourseByIdRow
 		&i.Course.Year,
 		&i.Course.CategoryID,
 		&i.Course.SubjectID,
+		&i.Course.Slug,
 		&i.Category.ID,
 		&i.Category.Title,
 		&i.Subject.ID,

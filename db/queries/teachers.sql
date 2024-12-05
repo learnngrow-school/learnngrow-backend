@@ -1,7 +1,7 @@
 -- name: CreateTeacher :one
 WITH new_user AS (
-	INSERT INTO users (email, password, is_teacher, first_name, middle_name, last_name)
-		VALUES ($1, $2, true, $3, $4, $5)
+	INSERT INTO users (email, password, is_teacher, first_name, middle_name, last_name, slug)
+		VALUES ($1, $2, true, $3, $4, $5, $6)
 	RETURNING *
 )
 INSERT INTO teachers (user_id)

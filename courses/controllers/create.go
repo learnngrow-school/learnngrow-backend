@@ -52,6 +52,7 @@ func getCreateCourseParams(course *models.CourseCreate) *repository.CreateCourse
 			String: course.Description,
 			Valid: course.Description != "",
 		},
+		Slug: utils.GetSlug(6),
 	}
 	copier.Copy(&params, &course)
 	return &params
