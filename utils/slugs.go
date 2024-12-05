@@ -20,7 +20,9 @@ func SetupSlugs() []rune {
 		}
 	}
 	sb.WriteString("-_")
-	return []rune(sb.String())
+	s := sb.String()
+	AlphabetLen = len(s)
+	return []rune(s)
 }
 
 func GetSlug(l int) string {
