@@ -4,15 +4,133 @@ definitions:
     properties:
       email:
         type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      middleName:
+        type: string
       password:
         type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
     type: object
   auth.UserGet:
     properties:
       email:
         type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      middleName:
+        type: string
+      slug:
+        type: string
+    type: object
+  auth.UserLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  courses.Category:
+    properties:
+      title:
+        type: string
+    type: object
+  courses.Course:
+    properties:
+      description:
+        type: string
+      grade:
+        type: integer
+      price:
+        type: integer
+      string:
+        type: string
+      title:
+        type: string
+    required:
+    - grade
+    - price
+    - title
+    type: object
+  courses.CourseCreate:
+    properties:
+      categoryId:
+        type: integer
+      description:
+        type: string
+      grade:
+        type: integer
+      price:
+        type: integer
+      string:
+        type: string
+      subjectId:
+        type: integer
+      title:
+        type: string
+    required:
+    - categoryId
+    - grade
+    - price
+    - subjectId
+    - title
+    type: object
+  courses.CourseWithData:
+    properties:
+      category:
+        $ref: '#/definitions/courses.Category'
+      course:
+        $ref: '#/definitions/courses.Course'
+      subject:
+        $ref: '#/definitions/courses.Subject'
+    type: object
+  courses.Subject:
+    properties:
+      title:
+        type: string
+    type: object
+  reviews.ReviewCreate:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
+    type: object
+  reviews.ReviewGet:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
       id:
         type: integer
+    type: object
+  teachers.Teacher:
+    properties:
+      biography:
+        type: string
+      subjectIds:
+        items:
+          type: integer
+        type: array
+    type: object
+  teachers.TeacherGet:
+    properties:
+      teacherData:
+        $ref: '#/definitions/teachers.Teacher'
+      userData:
+        $ref: '#/definitions/auth.UserGet'
     type: object
 info:
   contact: {}
@@ -20,6 +138,130 @@ info:
   title: My magical API
   version: "1"
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/auth.UserGet'
+      summary: Log in user, issue JWT into Cookie
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Logs user out (removes token cookie)
+      tags:
+      - Auth
+  /auth/me:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.UserGet'
+      summary: Get current user data
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/auth.UserGet'
+      summary: Create user
+      tags:
+      - Auth
+  /courses/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/courses.CourseWithData'
+            type: array
+      summary: Gets All courses
+      tags:
+      - Courses
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Course
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/courses.CourseCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/courses.Course'
+      summary: Create a course
+      tags:
+      - Courses
+  /courses/{slug}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Course slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/courses.CourseWithData'
+      summary: Get one course by id
+      tags:
+      - Courses
   /ping:
     get:
       description: |-
@@ -57,7 +299,58 @@ paths:
       summary: Ping API
       tags:
       - base
-  /register:
+  /reviews:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/reviews.ReviewGet'
+            type: array
+      summary: Get all school reviews
+      tags:
+      - Reviews
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/reviews.ReviewCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/reviews.ReviewGet'
+      summary: Create review
+      tags:
+      - Reviews
+  /teachers/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/teachers.TeacherGet'
+            type: array
+      summary: Get all teachers
+      tags:
+      - Teachers
     post:
       consumes:
       - application/json
@@ -70,12 +363,28 @@ paths:
           $ref: '#/definitions/auth.UserCreate'
       produces:
       - application/json
+      responses: {}
+      summary: Create teacher
+      tags:
+      - Teachers
+  /teachers/{slug}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Teacher Slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.UserGet'
-      summary: Create user
+            $ref: '#/definitions/teachers.TeacherGet'
+      summary: Get teacher by ID
       tags:
-      - base
+      - Teachers
 swagger: "2.0"
