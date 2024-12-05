@@ -130,3 +130,37 @@ func (q *Queries) GetCourseById(ctx context.Context, id int32) (GetCourseByIdRow
 	)
 	return i, err
 }
+
+const getCourseBySlug = `-- name: GetCourseBySlug :one
+SELECT c.id, c.title, c.description, c.price, c.year, c.category_id, c.subject_id, c.slug, ct.id, ct.title, sb.id, sb.title FROM courses AS C
+INNER JOIN categories AS CT ON category_id = CT.id
+INNER JOIN subjects AS SB ON subject_id = SB.id
+WHERE C.slug = $1
+LIMIT 1
+`
+
+type GetCourseBySlugRow struct {
+	Course   Course
+	Category Category
+	Subject  Subject
+}
+
+func (q *Queries) GetCourseBySlug(ctx context.Context, slug string) (GetCourseBySlugRow, error) {
+	row := q.db.QueryRow(ctx, getCourseBySlug, slug)
+	var i GetCourseBySlugRow
+	err := row.Scan(
+		&i.Course.ID,
+		&i.Course.Title,
+		&i.Course.Description,
+		&i.Course.Price,
+		&i.Course.Year,
+		&i.Course.CategoryID,
+		&i.Course.SubjectID,
+		&i.Course.Slug,
+		&i.Category.ID,
+		&i.Category.Title,
+		&i.Subject.ID,
+		&i.Subject.Title,
+	)
+	return i, err
+}
