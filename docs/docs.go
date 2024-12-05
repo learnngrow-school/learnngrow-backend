@@ -370,15 +370,12 @@ const docTemplate = `{
         "auth.UserCreate": {
             "type": "object",
             "required": [
-                "email",
                 "firstName",
                 "lastName",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "firstName": {
                     "type": "string"
                 },
@@ -390,15 +387,15 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                },
+                "phone": {
+                    "type": "string"
                 }
             }
         },
         "auth.UserGet": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "firstName": {
                     "type": "string"
                 },
@@ -406,6 +403,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "middleName": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 },
                 "slug": {
@@ -416,14 +416,14 @@ const docTemplate = `{
         "auth.UserLogin": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phone": {
                     "type": "string"
                 }
             }
