@@ -37,7 +37,10 @@ func CreateUser(c *gin.Context, isTeacher bool) {
 	}
 
 	// TODO: check middlename type
-	params := repository.CreateUserParams{IsTeacher: pgtype.Bool{Bool: isTeacher, Valid: true}}
+	params := repository.CreateUserParams{
+		IsTeacher: pgtype.Bool{Bool: isTeacher, Valid: true},
+		Slug: utils.GetSlug(6),
+	}
 	copier.Copy(&params, &user)
 
 	if params.Password, err = auth.Hash(&params, user.Password); err != nil {

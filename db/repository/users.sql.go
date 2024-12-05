@@ -12,8 +12,8 @@ import (
 )
 
 const createSuperuser = `-- name: CreateSuperuser :exec
-INSERT INTO users (email, PASSWORD, is_teacher, is_superuser, first_name, last_name)
-    VALUES ('admin', $1, FALSE, TRUE, 'Admin', 'Admin')
+INSERT INTO users (email, PASSWORD, is_teacher, is_superuser, first_name, last_name, slug)
+    VALUES ('admin', $1, FALSE, TRUE, 'Admin', 'Admin', 'Admin')
 ON CONFLICT(email) DO UPDATE SET password = $1
 `
 
@@ -23,10 +23,10 @@ func (q *Queries) CreateSuperuser(ctx context.Context, password []byte) error {
 }
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (email, PASSWORD, is_teacher, first_name, middle_name, last_name)
-    VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO users (email, PASSWORD, is_teacher, first_name, middle_name, last_name, slug)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING
-    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name
+    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug
 `
 
 type CreateUserParams struct {
@@ -36,6 +36,7 @@ type CreateUserParams struct {
 	FirstName  string
 	MiddleName pgtype.Text
 	LastName   string
+	Slug       string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -46,6 +47,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.FirstName,
 		arg.MiddleName,
 		arg.LastName,
+		arg.Slug,
 	)
 	var i User
 	err := row.Scan(
@@ -57,13 +59,14 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.FirstName,
 		&i.MiddleName,
 		&i.LastName,
+		&i.Slug,
 	)
 	return i, err
 }
 
 const getUser = `-- name: GetUser :one
 SELECT
-    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name
+    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug
 FROM
     users
 WHERE
@@ -83,6 +86,7 @@ func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
 		&i.FirstName,
 		&i.MiddleName,
 		&i.LastName,
+		&i.Slug,
 	)
 	return i, err
 }

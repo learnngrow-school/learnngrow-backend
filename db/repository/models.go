@@ -21,6 +21,7 @@ type Course struct {
 	Year        pgtype.Int2
 	CategoryID  int32
 	SubjectID   int32
+	Slug        string
 }
 
 type CourseReview struct {
@@ -70,4 +71,5 @@ type User struct {
 	FirstName   string
 	MiddleName  pgtype.Text
 	LastName    string
+	Slug        string
 }

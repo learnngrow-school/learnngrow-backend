@@ -19,6 +19,7 @@ import (
 	"learn-n-grow.dev/m/internal/middlewares"
 	"learn-n-grow.dev/m/reviews"
 	"learn-n-grow.dev/m/teachers"
+	"learn-n-grow.dev/m/utils"
 
 	"learn-n-grow.dev/m/auth"
 	"learn-n-grow.dev/m/internal"
@@ -29,6 +30,7 @@ func startServer() {
 	r := gin.Default()
 	r.Use(middlewares.CORSMiddleware())
 	r.Use(middlewares.JWTMiddleware())
+	utils.SetupSlugs()
 
 	v1 := r.Group("/api/v1")
 

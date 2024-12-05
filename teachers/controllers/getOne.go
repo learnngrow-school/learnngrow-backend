@@ -3,7 +3,6 @@ package teachers
 import (
 	"context"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
@@ -18,17 +17,17 @@ import (
 // @accept  json
 // @produce json
 // @tags    Teachers
-// @param   id  path     int true "Teacher ID"
-// @success 200 {object} TeacherGet
-// @router  /teachers/{id} [get]
+// @param   slug  path       string true "Teacher Slug"
+// @success 200   {object}   TeacherGet
+// @router  /teachers/{slug} [get]
 func GetOne(c *gin.Context) {
-	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
-	if err != nil {
-		utils.Throw(c, http.StatusUnprocessableEntity, err)
-	}
+	slugParam := c.Param("slug")
+	// id, err := strconv.Atoi(idParam)
+	// if err != nil {
+	// 	utils.Throw(c, http.StatusUnprocessableEntity, err)
+	// }
 
-	teacher, err := internal.Server.Repo.GetTeacherByID(context.Background(), int32(id))
+	teacher, err := internal.Server.Repo.GetTeacherBySlug(context.Background(), slugParam)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 	}

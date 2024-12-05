@@ -28,6 +28,8 @@ definitions:
         type: string
       middleName:
         type: string
+      slug:
+        type: string
     type: object
   auth.UserLogin:
     properties:
@@ -52,6 +54,8 @@ definitions:
         type: integer
       price:
         type: integer
+      string:
+        type: string
       title:
         type: string
     required:
@@ -62,11 +66,6 @@ definitions:
   courses.CourseCreate:
     properties:
       categoryId:
-        description: |-
-          Title       string `json:"title" binding:"required"`
-          Description string `json:"description" copier:"-"`
-          Price       int32 `json:"price" binding:"required"`
-          Year        int16 `json:"grade" binding:"required" copier:"-"`
         type: integer
       description:
         type: string
@@ -74,6 +73,8 @@ definitions:
         type: integer
       price:
         type: integer
+      string:
+        type: string
       subjectId:
         type: integer
       title:
@@ -241,16 +242,16 @@ paths:
       summary: Create a course
       tags:
       - Courses
-  /courses/{id}:
+  /courses/{slug}:
     get:
       consumes:
       - application/json
       parameters:
-      - description: Course ID
+      - description: Course slug
         in: path
-        name: id
+        name: slug
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -366,16 +367,16 @@ paths:
       summary: Create teacher
       tags:
       - Teachers
-  /teachers/{id}:
+  /teachers/{slug}:
     get:
       consumes:
       - application/json
       parameters:
-      - description: Teacher ID
+      - description: Teacher Slug
         in: path
-        name: id
+        name: slug
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:

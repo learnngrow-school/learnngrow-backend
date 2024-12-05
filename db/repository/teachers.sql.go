@@ -13,9 +13,9 @@ import (
 
 const createTeacher = `-- name: CreateTeacher :one
 WITH new_user AS (
-	INSERT INTO users (email, password, is_teacher, first_name, middle_name, last_name)
-		VALUES ($1, $2, true, $3, $4, $5)
-	RETURNING id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name
+	INSERT INTO users (email, password, is_teacher, first_name, middle_name, last_name, slug)
+		VALUES ($1, $2, true, $3, $4, $5, $6)
+	RETURNING id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug
 )
 INSERT INTO teachers (user_id)
 	VALUES ((SELECT id FROM new_user))
@@ -28,6 +28,7 @@ type CreateTeacherParams struct {
 	FirstName  string
 	MiddleName pgtype.Text
 	LastName   string
+	Slug       string
 }
 
 func (q *Queries) CreateTeacher(ctx context.Context, arg CreateTeacherParams) (int32, error) {
@@ -37,6 +38,7 @@ func (q *Queries) CreateTeacher(ctx context.Context, arg CreateTeacherParams) (i
 		arg.FirstName,
 		arg.MiddleName,
 		arg.LastName,
+		arg.Slug,
 	)
 	var user_id int32
 	err := row.Scan(&user_id)
@@ -44,9 +46,9 @@ func (q *Queries) CreateTeacher(ctx context.Context, arg CreateTeacherParams) (i
 }
 
 const getAllTeachers = `-- name: GetAllTeachers :many
-SELECT u.id, u.email, u.password, u.is_teacher, u.is_superuser, u.first_name, u.middle_name, u.last_name, t.user_id, t.subject_ids, t.biography
+SELECT u.id, u.email, u.password, u.is_teacher, u.is_superuser, u.first_name, u.middle_name, u.last_name, u.slug, t.user_id, t.subject_ids, t.biography
 FROM teachers AS T
-LEFT JOIN users AS U ON T.user_id = U.id
+INNER JOIN users AS U ON T.user_id = U.id
 ORDER BY T.user_id
 `
 
@@ -73,6 +75,7 @@ func (q *Queries) GetAllTeachers(ctx context.Context) ([]GetAllTeachersRow, erro
 			&i.User.FirstName,
 			&i.User.MiddleName,
 			&i.User.LastName,
+			&i.User.Slug,
 			&i.Teacher.UserID,
 			&i.Teacher.SubjectIds,
 			&i.Teacher.Biography,
@@ -88,9 +91,9 @@ func (q *Queries) GetAllTeachers(ctx context.Context) ([]GetAllTeachersRow, erro
 }
 
 const getTeacherByID = `-- name: GetTeacherByID :one
-SELECT u.id, u.email, u.password, u.is_teacher, u.is_superuser, u.first_name, u.middle_name, u.last_name, t.user_id, t.subject_ids, t.biography
+SELECT u.id, u.email, u.password, u.is_teacher, u.is_superuser, u.first_name, u.middle_name, u.last_name, u.slug, t.user_id, t.subject_ids, t.biography
 FROM teachers AS T
-LEFT JOIN users AS U ON T.user_id = U.id
+INNER JOIN users AS U ON T.user_id = U.id
 WHERE T.user_id = $1
 LIMIT 1
 `
@@ -112,6 +115,40 @@ func (q *Queries) GetTeacherByID(ctx context.Context, userID int32) (GetTeacherB
 		&i.User.FirstName,
 		&i.User.MiddleName,
 		&i.User.LastName,
+		&i.User.Slug,
+		&i.Teacher.UserID,
+		&i.Teacher.SubjectIds,
+		&i.Teacher.Biography,
+	)
+	return i, err
+}
+
+const getTeacherBySlug = `-- name: GetTeacherBySlug :one
+SELECT u.id, u.email, u.password, u.is_teacher, u.is_superuser, u.first_name, u.middle_name, u.last_name, u.slug, t.user_id, t.subject_ids, t.biography
+FROM teachers AS T
+INNER JOIN users AS U ON T.user_id = U.id
+WHERE U.slug = $1
+LIMIT 1
+`
+
+type GetTeacherBySlugRow struct {
+	User    User
+	Teacher Teacher
+}
+
+func (q *Queries) GetTeacherBySlug(ctx context.Context, slug string) (GetTeacherBySlugRow, error) {
+	row := q.db.QueryRow(ctx, getTeacherBySlug, slug)
+	var i GetTeacherBySlugRow
+	err := row.Scan(
+		&i.User.ID,
+		&i.User.Email,
+		&i.User.Password,
+		&i.User.IsTeacher,
+		&i.User.IsSuperuser,
+		&i.User.FirstName,
+		&i.User.MiddleName,
+		&i.User.LastName,
+		&i.User.Slug,
 		&i.Teacher.UserID,
 		&i.Teacher.SubjectIds,
 		&i.Teacher.Biography,

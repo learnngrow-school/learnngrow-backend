@@ -23,6 +23,7 @@ type UserGet struct {
 	FirstName  string `json:"firstName"`
 	MiddleName string `json:"middleName"`
 	LastName   string `json:"lastName"`
+	Slug       string `json:"slug"`
 }
 
 func Hash[T repository.CreateUserParams | repository.CreateTeacherParams] (params *T, password string) (hashed []byte, err error) {

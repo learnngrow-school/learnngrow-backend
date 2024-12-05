@@ -178,7 +178,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/courses/{id}": {
+        "/courses/{slug}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -192,9 +192,9 @@ const docTemplate = `{
                 "summary": "Get one course by id",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Course ID",
-                        "name": "id",
+                        "type": "string",
+                        "description": "Course slug",
+                        "name": "slug",
                         "in": "path",
                         "required": true
                     }
@@ -334,7 +334,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/teachers/{id}": {
+        "/teachers/{slug}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -348,9 +348,9 @@ const docTemplate = `{
                 "summary": "Get teacher by ID",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Teacher ID",
-                        "name": "id",
+                        "type": "string",
+                        "description": "Teacher Slug",
+                        "name": "slug",
                         "in": "path",
                         "required": true
                     }
@@ -407,6 +407,9 @@ const docTemplate = `{
                 },
                 "middleName": {
                     "type": "string"
+                },
+                "slug": {
+                    "type": "string"
                 }
             }
         },
@@ -450,6 +453,9 @@ const docTemplate = `{
                 "price": {
                     "type": "integer"
                 },
+                "string": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 }
@@ -466,7 +472,6 @@ const docTemplate = `{
             ],
             "properties": {
                 "categoryId": {
-                    "description": "Title       string ` + "`" + `json:\"title\" binding:\"required\"` + "`" + `\nDescription string ` + "`" + `json:\"description\" copier:\"-\"` + "`" + `\nPrice       int32 ` + "`" + `json:\"price\" binding:\"required\"` + "`" + `\nYear        int16 ` + "`" + `json:\"grade\" binding:\"required\" copier:\"-\"` + "`" + `",
                     "type": "integer"
                 },
                 "description": {
@@ -477,6 +482,9 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "integer"
+                },
+                "string": {
+                    "type": "string"
                 },
                 "subjectId": {
                     "type": "integer"

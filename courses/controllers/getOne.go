@@ -3,7 +3,6 @@ package courses
 import (
 	"context"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
@@ -17,21 +16,19 @@ import (
 // @accept  json
 // @produce json
 // @tags    Courses
-// @param   id  path     int true "Course ID"
-// @success 200 {object} courses.CourseWithData
-// @router  /courses/{id} [get]
+// @param   slug  path     string true "Course slug"
+// @success 200   {object} courses.CourseWithData
+// @router  /courses/{slug}  [get]
 func GetOneCourse(c *gin.Context) {
-	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	slugParam := c.Param("slug")
+
+	course, err := internal.Server.Repo.GetCourseBySlug(context.Background(), slugParam)
 	if err != nil {
-		utils.Throw(c, http.StatusUnprocessableEntity, err)
+		utils.Throw(c, http.StatusInternalServerError, err)	
 	}
 
-	course, _ := internal.Server.Repo.GetCourseById(context.Background(), int32(id))
-
 	var courseRes courses.CourseWithData
-
-	copier.Copy(&courseRes, &course)
+	copier.CopyWithOption(&courseRes, &course, copier.Option{DeepCopy: true})
 
 	c.JSON(http.StatusOK, courseRes)
 }

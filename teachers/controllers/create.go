@@ -39,7 +39,7 @@ func Create(c *gin.Context) {
 	}
 
 	// TODO: check middlename type
-	params := repository.CreateTeacherParams{}
+	params := repository.CreateTeacherParams{Slug: utils.GetSlug(6)}
 	copier.Copy(&params, &user)
 
 	if params.Password, err = auth.Hash(&params, user.Password); err != nil {
