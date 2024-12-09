@@ -37,6 +37,15 @@ type CoursesTeacher struct {
 	TeacherID int32
 }
 
+type Lesson struct {
+	ID           int32
+	StudentID    int32
+	TeacherID    int32
+	TimestampM   int32
+	TeacherNotes string
+	Homework     string
+}
+
 type SchoolReview struct {
 	ID         int32
 	Details    string
