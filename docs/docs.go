@@ -210,6 +210,28 @@ const docTemplate = `{
             }
         },
         "/lessons/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lessons",
+                    "by-teacher",
+                    "by-student"
+                ],
+                "summary": "Get all user's lessons",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lessons.LessonGet"
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -219,7 +241,7 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "Lessons",
-                    "Teacher"
+                    "by teacher"
                 ],
                 "summary": "Create a lesson",
                 "parameters": [

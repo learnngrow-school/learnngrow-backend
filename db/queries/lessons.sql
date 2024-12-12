@@ -27,3 +27,10 @@ INSERT INTO lessons (
 )
 RETURNING *;
 
+-- name: GetLessonsByTeacher :many
+SELECT L.*
+FROM lessons AS L
+INNER JOIN teachers AS T ON L.teacher_id = T.user_id
+INNER JOIN users AS U ON T.user_id = U.id
+WHERE U.email = $1; --TODO replace with slugs
+

@@ -66,3 +66,38 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 	)
 	return i, err
 }
+
+const getLessonsByTeacher = `-- name: GetLessonsByTeacher :many
+SELECT l.id, l.student_id, l.teacher_id, l.timestamp_m, l.teacher_notes, l.homework
+FROM lessons AS L
+INNER JOIN teachers AS T ON L.teacher_id = T.user_id
+INNER JOIN users AS U ON T.user_id = U.id
+WHERE U.email = $1
+`
+
+func (q *Queries) GetLessonsByTeacher(ctx context.Context, email string) ([]Lesson, error) {
+	rows, err := q.db.Query(ctx, getLessonsByTeacher, email)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Lesson
+	for rows.Next() {
+		var i Lesson
+		if err := rows.Scan(
+			&i.ID,
+			&i.StudentID,
+			&i.TeacherID,
+			&i.TimestampM,
+			&i.TeacherNotes,
+			&i.Homework,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
