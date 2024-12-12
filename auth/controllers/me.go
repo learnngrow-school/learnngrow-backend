@@ -19,7 +19,7 @@ import (
 // @accept  json
 // @produce json
 // @tags    Auth
-// @success 200 {object} auth.UserGet
+// @success 200 {object} auth.UserMe
 // @router  /auth/me [get]
 func GetMe(c *gin.Context) {
 	var err error
@@ -42,8 +42,8 @@ func GetMe(c *gin.Context) {
 		return
 	}
 
-	userGet := auth.UserGet{}
-	copier.Copy(&userGet, &record)
+	userMe := auth.UserMe{}
+	copier.Copy(&userMe, &record)
 
-	c.JSON(http.StatusOK, userGet)
+	c.JSON(http.StatusOK, userMe)
 }

@@ -21,7 +21,7 @@ import (
 // @produce json
 // @param   user body auth.UserLogin true "User"
 // @tags    Auth
-// @success 202 {object} auth.UserGet
+// @success 202 {object} auth.UserMe
 // @router  /auth/login [post]
 func Login(c *gin.Context) {
 	var loginData auth.UserLogin
@@ -50,9 +50,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	userGet := auth.UserGet{}
-	copier.Copy(&userGet, &record)
+	userMe := auth.UserMe{}
+	copier.Copy(&userMe, &record)
 
 	c.SetCookie("token", jwt, int(jwtUtil.ExpTime), "/", internal.Server.Domain, false, true)
-	c.JSON(http.StatusAccepted, userGet)
+	c.JSON(http.StatusAccepted, userMe)
 }
