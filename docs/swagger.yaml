@@ -194,7 +194,7 @@ paths:
         "202":
           description: Accepted
           schema:
-            $ref: '#/definitions/auth.UserGet'
+            $ref: '#/definitions/auth.UserMe'
       summary: Log in user, issue JWT into Cookie
       tags:
       - Auth

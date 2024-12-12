@@ -42,7 +42,7 @@ const docTemplate = `{
                     "202": {
                         "description": "Accepted",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
+                            "$ref": "#/definitions/auth.UserMe"
                         }
                     }
                 }
