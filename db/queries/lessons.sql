@@ -48,7 +48,8 @@ FROM
 WHERE
 	U.email = $1 --TODO replace with slugs
 	AND L.timestamp_m BETWEEN
-		(SELECT wstart FROM week) AND (SELECT webd FROM week);
+		(SELECT wstart FROM week) AND (SELECT webd FROM week)
+ORDER BY L.timestamp_m;
 
 
 
