@@ -100,6 +100,28 @@ definitions:
       title:
         type: string
     type: object
+  lessons.LessonCreate:
+    properties:
+      homework:
+        type: string
+      studentSlug:
+        type: string
+      teacherNotes:
+        type: string
+      teacherSlug:
+        type: string
+      timestamp:
+        type: integer
+    type: object
+  lessons.LessonGet:
+    properties:
+      homework:
+        type: string
+      teacherNotes:
+        type: string
+      timestamp:
+        type: integer
+    type: object
   reviews.ReviewCreate:
     properties:
       authorName:
@@ -262,6 +284,43 @@ paths:
       summary: Get one course by id
       tags:
       - Courses
+  /lessons/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lessons.LessonGet'
+      summary: Get all user's lessons
+      tags:
+      - Lessons
+      - by-teacher
+      - by-student
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/lessons.LessonCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/lessons.LessonGet'
+      summary: Create a lesson
+      tags:
+      - Lessons
+      - by teacher
   /ping:
     get:
       description: |-
