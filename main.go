@@ -19,6 +19,7 @@ import (
 	"learn-n-grow.dev/m/internal/middlewares"
 	"learn-n-grow.dev/m/reviews"
 	"learn-n-grow.dev/m/teachers"
+	"learn-n-grow.dev/m/lessons"
 	"learn-n-grow.dev/m/utils"
 
 	"learn-n-grow.dev/m/auth"
@@ -39,6 +40,7 @@ func startServer() {
 	teachers.AddRoutes(v1)
 	courses.AddRoutes(v1)
 	reviews.AddRoutes(v1)
+	lessons.AddRoutes(v1)
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/docs", func(ctx *gin.Context) {
