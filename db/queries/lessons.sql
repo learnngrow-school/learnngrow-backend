@@ -28,9 +28,27 @@ INSERT INTO lessons (
 RETURNING *;
 
 -- name: GetLessonsByTeacher :many
+WITH week_start_datetime AS (
+	SELECT
+		CURRENT_DATE - (
+			SELECT EXTRACT(ISODOW FROM now())
+		)::INTEGER + 1 AS ts
+)
+week AS (
+	SELECT
+		(TS) / 60)::INTEGER AS wstart
+	,	(TS + 7) / 60)::INTEGER AS wend
+	FROM week_start_datetime AS TS
+)
 SELECT L.*
-FROM lessons AS L
-INNER JOIN teachers AS T ON L.teacher_id = T.user_id
-INNER JOIN users AS U ON T.user_id = U.id
-WHERE U.email = $1; --TODO replace with slugs
+FROM
+	lessons AS L
+	INNER JOIN teachers AS T ON L.teacher_id = T.user_id
+	INNER JOIN users AS U ON T.user_id = U.id
+WHERE
+	U.email = $1 --TODO replace with slugs
+	AND L.timestamp_m BETWEEN
+		(SELECT wstart FROM week) AND (SELECT webd FROM week);
+
+
 
