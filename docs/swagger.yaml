@@ -94,6 +94,24 @@ definitions:
       title:
         type: string
     type: object
+  reviews.CourseReviewCreate:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
+      rating:
+        type: integer
+    type: object
+  reviews.CourseReviewGet:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
+      id:
+        type: integer
+    type: object
   reviews.ReviewCreate:
     properties:
       authorName:
@@ -102,6 +120,24 @@ definitions:
         type: string
     type: object
   reviews.ReviewGet:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
+      id:
+        type: integer
+    type: object
+  reviews.TeacherReviewCreate:
+    properties:
+      authorName:
+        type: string
+      details:
+        type: string
+      rating:
+        type: integer
+    type: object
+  reviews.TeacherReviewGet:
     properties:
       authorName:
         type: string
@@ -244,6 +280,55 @@ paths:
       summary: Get one course by id
       tags:
       - Courses
+  /courses/{id}/reviews:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Course Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/reviews.CourseReviewGet'
+            type: array
+      summary: Get all course reviews
+      tags:
+      - Reviews
+      - Courses
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Course Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Review
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/reviews.CourseReviewCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/reviews.CourseReviewGet'
+      summary: Create course review
+      tags:
+      - Reviews
+      - Courses
   /ping:
     get:
       description: |-
@@ -281,7 +366,7 @@ paths:
       summary: Ping API
       tags:
       - base
-  /reviews:
+  /school/reviews:
     get:
       consumes:
       - application/json
@@ -368,5 +453,54 @@ paths:
             $ref: '#/definitions/teachers.TeacherGet'
       summary: Get teacher by ID
       tags:
+      - Teachers
+  /teachers/{id}/reviews:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Teacher Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/reviews.TeacherReviewGet'
+            type: array
+      summary: Get all teacher reviews
+      tags:
+      - Reviews
+      - Teachers
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Teacher Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Review
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/reviews.TeacherReviewCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/reviews.TeacherReviewGet'
+      summary: Create teacher review
+      tags:
+      - Reviews
       - Teachers
 swagger: "2.0"

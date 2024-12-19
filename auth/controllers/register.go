@@ -30,8 +30,7 @@ func Register(c *gin.Context) {
 func CreateUser(c *gin.Context, isTeacher bool) {
 	var err error
 
-	data, _ := c.Get("input")
-	user, _ := data.(auth.UserCreate)
+	user := *utils.Rebind(c, &auth.UserCreate{})
 
 	params := repository.CreateUserParams{IsTeacher: pgtype.Bool{Bool: isTeacher, Valid: true}}
 	copier.Copy(&params, &user)

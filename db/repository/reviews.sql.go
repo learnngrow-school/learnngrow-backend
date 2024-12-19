@@ -9,22 +9,117 @@ import (
 	"context"
 )
 
-const createReview = `-- name: CreateReview :one
+const createCourseReview = `-- name: CreateCourseReview :one
+INSERT INTO course_reviews (details, author_name, course_id, rating)
+	VALUES ($1, $2, $3, $4)
+RETURNING id, rating, details, author_name, course_id
+`
+
+type CreateCourseReviewParams struct {
+	Details    string
+	AuthorName string
+	CourseID   int32
+	Rating     int16
+}
+
+func (q *Queries) CreateCourseReview(ctx context.Context, arg CreateCourseReviewParams) (CourseReview, error) {
+	row := q.db.QueryRow(ctx, createCourseReview,
+		arg.Details,
+		arg.AuthorName,
+		arg.CourseID,
+		arg.Rating,
+	)
+	var i CourseReview
+	err := row.Scan(
+		&i.ID,
+		&i.Rating,
+		&i.Details,
+		&i.AuthorName,
+		&i.CourseID,
+	)
+	return i, err
+}
+
+const createSchoolReview = `-- name: CreateSchoolReview :one
 INSERT INTO school_reviews (details, author_name)
 	VALUES ($1, $2)
 RETURNING id, details, author_name
 `
 
-type CreateReviewParams struct {
+type CreateSchoolReviewParams struct {
 	Details    string
 	AuthorName string
 }
 
-func (q *Queries) CreateReview(ctx context.Context, arg CreateReviewParams) (SchoolReview, error) {
-	row := q.db.QueryRow(ctx, createReview, arg.Details, arg.AuthorName)
+func (q *Queries) CreateSchoolReview(ctx context.Context, arg CreateSchoolReviewParams) (SchoolReview, error) {
+	row := q.db.QueryRow(ctx, createSchoolReview, arg.Details, arg.AuthorName)
 	var i SchoolReview
 	err := row.Scan(&i.ID, &i.Details, &i.AuthorName)
 	return i, err
+}
+
+const createTeacherReview = `-- name: CreateTeacherReview :one
+INSERT INTO teacher_reviews (details, author_name, teacher_id, rating)
+	VALUES ($1, $2, $3, $4)
+RETURNING id, rating, details, author_name, teacher_id
+`
+
+type CreateTeacherReviewParams struct {
+	Details    string
+	AuthorName string
+	TeacherID  int32
+	Rating     int16
+}
+
+func (q *Queries) CreateTeacherReview(ctx context.Context, arg CreateTeacherReviewParams) (TeacherReview, error) {
+	row := q.db.QueryRow(ctx, createTeacherReview,
+		arg.Details,
+		arg.AuthorName,
+		arg.TeacherID,
+		arg.Rating,
+	)
+	var i TeacherReview
+	err := row.Scan(
+		&i.ID,
+		&i.Rating,
+		&i.Details,
+		&i.AuthorName,
+		&i.TeacherID,
+	)
+	return i, err
+}
+
+const getAllCourseReviews = `-- name: GetAllCourseReviews :many
+SELECT id, rating, details, author_name, course_id
+FROM course_reviews
+WHERE course_id = $1
+ORDER BY id
+`
+
+func (q *Queries) GetAllCourseReviews(ctx context.Context, courseID int32) ([]CourseReview, error) {
+	rows, err := q.db.Query(ctx, getAllCourseReviews, courseID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CourseReview
+	for rows.Next() {
+		var i CourseReview
+		if err := rows.Scan(
+			&i.ID,
+			&i.Rating,
+			&i.Details,
+			&i.AuthorName,
+			&i.CourseID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getAllSchoolReviews = `-- name: GetAllSchoolReviews :many
@@ -43,6 +138,39 @@ func (q *Queries) GetAllSchoolReviews(ctx context.Context) ([]SchoolReview, erro
 	for rows.Next() {
 		var i SchoolReview
 		if err := rows.Scan(&i.ID, &i.Details, &i.AuthorName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAllTeacherReviews = `-- name: GetAllTeacherReviews :many
+SELECT id, rating, details, author_name, teacher_id
+FROM teacher_reviews
+WHERE teacher_id = $1
+ORDER BY id
+`
+
+func (q *Queries) GetAllTeacherReviews(ctx context.Context, teacherID int32) ([]TeacherReview, error) {
+	rows, err := q.db.Query(ctx, getAllTeacherReviews, teacherID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []TeacherReview
+	for rows.Next() {
+		var i TeacherReview
+		if err := rows.Scan(
+			&i.ID,
+			&i.Rating,
+			&i.Details,
+			&i.AuthorName,
+			&i.TeacherID,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

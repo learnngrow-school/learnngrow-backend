@@ -30,15 +30,13 @@ func Create(c *gin.Context) {
 
 	var err error
 
-	// func CreateUser(c *gin.Context, isTeacher bool) {
-	var user auth.UserCreate
+	user := utils.Rebind(c, &auth.UserCreate{})
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		utils.Throw(c, http.StatusBadRequest, err)
 		return
 	}
 
-	// TODO: check middlename type
 	params := repository.CreateTeacherParams{}
 	copier.Copy(&params, &user)
 

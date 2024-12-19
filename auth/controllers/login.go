@@ -24,8 +24,7 @@ import (
 // @success 202 {object} auth.UserGet
 // @router  /auth/login [post]
 func Login(c *gin.Context) {
-	data, _ := c.Get("input")
-	loginData, _ := data.(auth.UserLogin)
+	loginData := *utils.Rebind(c, &auth.UserLogin{})
 
 	var record repository.User
 	record, err := internal.Server.Repo.GetUser(context.Background(), loginData.Email)

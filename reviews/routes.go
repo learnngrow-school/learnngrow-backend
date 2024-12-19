@@ -10,7 +10,11 @@ import (
 func AddRoutes(r *gin.RouterGroup) {
 	g := r.Group("/")
 	{
-		g.POST("/reviews", middlewares.Validate(models.ReviewCreate{}), reviews.Create)
-		g.GET("/reviews", reviews.GetAll)
+		g.POST("/school/reviews", middlewares.Validate(models.ReviewCreate{}), reviews.Create)
+		g.GET("/school/reviews", reviews.GetAll)
+		g.POST("/teachers/:id/reviews", middlewares.Validate(models.ReviewCreate{}), reviews.TeacherCreate)
+		g.GET("/teachers/:id/reviews", reviews.TeacherGetAll)
+		g.POST("/courses/:id/reviews", middlewares.Validate(models.ReviewCreate{}), reviews.CourseCreate)
+		g.GET("/courses/:id/reviews", reviews.CourseGetAll)
 	}
 }

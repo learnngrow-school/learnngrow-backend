@@ -183,6 +183,80 @@
                 }
             }
         },
+        "/courses/{id}/reviews": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reviews",
+                    "Courses"
+                ],
+                "summary": "Get all course reviews",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Course Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/reviews.CourseReviewGet"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reviews",
+                    "Courses"
+                ],
+                "summary": "Create course review",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Course Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Review",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reviews.CourseReviewCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/reviews.CourseReviewGet"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "In the realm of code where data flows,\nA whisper travels where the network goes.\nWith a simple command, a heartbeat is sent,\nTo check the connection, to see where it went.\n\n\"Ping,\" it calls, like a friendly chime,\nA request for response, a dance through time.\nFrom client to server, a message takes flight,\nIn packets it journeys, through day and through night.\n\n\"Are you there?\" it asks, with a digital sigh,\nA promise of data, a link to the sky.\nThe echo returns, a confirmation so sweet,\nA symphony of bytes, where two systems meet.\n\nIn the world of APIs, where services blend,\nPing is the guardian, the reliable friend.\nIt measures the distance, the latency's grace,\nA pulse of the network, a test of the space.\n\nSo here’s to the ping, in its silent decree,\nA bridge in the ether, connecting you and me.\nWith each little packet, a story unfolds,\nIn the language of tech, where the future beholds.",
@@ -203,7 +277,7 @@
                 }
             }
         },
-        "/reviews": {
+        "/school/reviews": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -334,6 +408,80 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/teachers.TeacherGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/teachers/{id}/reviews": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reviews",
+                    "Teachers"
+                ],
+                "summary": "Get all teacher reviews",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Teacher Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/reviews.TeacherReviewGet"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reviews",
+                    "Teachers"
+                ],
+                "summary": "Create teacher review",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Teacher Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Review",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reviews.TeacherReviewCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/reviews.TeacherReviewGet"
                         }
                     }
                 }
@@ -481,6 +629,34 @@
                 }
             }
         },
+        "reviews.CourseReviewCreate": {
+            "type": "object",
+            "properties": {
+                "authorName": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "integer"
+                }
+            }
+        },
+        "reviews.CourseReviewGet": {
+            "type": "object",
+            "properties": {
+                "authorName": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "reviews.ReviewCreate": {
             "type": "object",
             "properties": {
@@ -493,6 +669,34 @@
             }
         },
         "reviews.ReviewGet": {
+            "type": "object",
+            "properties": {
+                "authorName": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "reviews.TeacherReviewCreate": {
+            "type": "object",
+            "properties": {
+                "authorName": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "integer"
+                }
+            }
+        },
+        "reviews.TeacherReviewGet": {
             "type": "object",
             "properties": {
                 "authorName": {

@@ -23,21 +23,22 @@ import (
 // @success 201 {object} courses.Course
 // @router  /courses/ [post]
 func CreateCourse(c *gin.Context) {
+	var err error
+
 	email, emailIsSet := c.Get("userEmail")
 	if !emailIsSet || email != "admin" {
 		utils.Throw(c, http.StatusUnauthorized, errors.New("You are not superuser"))
 		return
 	}
 
-	var err error
-	var course models.CourseCreate
+	course := *utils.Rebind(c, &models.CourseCreate{})
 	
-	if err = c.ShouldBindJSON(&course); err != nil {
-		utils.Throw(c, http.StatusBadRequest, err)
-	}
-
 	params := *getCreateCourseParams(&course)
 	record, err := internal.Server.Repo.CreateCourse(context.Background(), params)
+
+	if err != nil {
+		utils.Throw(c, http.StatusInternalServerError, err)
+	}
 
 	c.JSON(http.StatusCreated, record)
 }

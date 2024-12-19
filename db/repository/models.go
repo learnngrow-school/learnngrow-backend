@@ -26,9 +26,9 @@ type Course struct {
 type CourseReview struct {
 	ID         int32
 	Rating     int16
-	Details    pgtype.Text
+	Details    string
 	AuthorName string
-	CourseID   pgtype.Int4
+	CourseID   int32
 }
 
 type CoursesTeacher struct {
@@ -56,9 +56,9 @@ type Teacher struct {
 type TeacherReview struct {
 	ID         int32
 	Rating     int16
-	Details    pgtype.Text
+	Details    string
 	AuthorName string
-	TeacherID  pgtype.Int4
+	TeacherID  int32
 }
 
 type User struct {
