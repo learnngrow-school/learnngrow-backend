@@ -42,7 +42,7 @@ const docTemplate = `{
                     "202": {
                         "description": "Accepted",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
+                            "$ref": "#/definitions/auth.UserMe"
                         }
                     }
                 }
@@ -83,7 +83,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
+                            "$ref": "#/definitions/auth.UserMe"
                         }
                     }
                 }
@@ -480,6 +480,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.UserMe": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "isSuperuser": {
+                    "type": "boolean"
+                },
+                "isTeacher": {
+                    "type": "boolean"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "middleName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "slug": {
                     "type": "string"
                 }
             }
