@@ -210,28 +210,6 @@ const docTemplate = `{
             }
         },
         "/lessons/": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Lessons",
-                    "by-teacher",
-                    "by-student"
-                ],
-                "summary": "Get all user's lessons",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/lessons.LessonGet"
-                        }
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -258,6 +236,38 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/lessons.LessonGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/lessons/{week}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lessons",
+                    "by-teacher",
+                    "by-student"
+                ],
+                "summary": "Get all user's lessons",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Week",
+                        "name": "week",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/lessons.LessonGet"
                         }

@@ -7,6 +7,8 @@ package repository
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createLesson = `-- name: CreateLesson :one
@@ -26,7 +28,7 @@ WITH student AS (
 INSERT INTO lessons (
 	student_id
 ,	teacher_id
-,	timestamp_m
+,	ts
 ,	teacher_notes
 ,	homework
 ) VALUES (
@@ -36,13 +38,13 @@ INSERT INTO lessons (
 ,	$4
 ,	$5
 )
-RETURNING id, student_id, teacher_id, timestamp_m, teacher_notes, homework
+RETURNING id, student_id, teacher_id, teacher_notes, homework, ts
 `
 
 type CreateLessonParams struct {
 	Slug         string
 	Slug_2       string
-	TimestampM   int32
+	Ts           pgtype.Timestamptz
 	TeacherNotes string
 	Homework     string
 }
@@ -51,7 +53,7 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 	row := q.db.QueryRow(ctx, createLesson,
 		arg.Slug,
 		arg.Slug_2,
-		arg.TimestampM,
+		arg.Ts,
 		arg.TeacherNotes,
 		arg.Homework,
 	)
@@ -60,23 +62,35 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 		&i.ID,
 		&i.StudentID,
 		&i.TeacherID,
-		&i.TimestampM,
 		&i.TeacherNotes,
 		&i.Homework,
+		&i.Ts,
 	)
 	return i, err
 }
 
-const getLessonsByTeacher = `-- name: GetLessonsByTeacher :many
-SELECT l.id, l.student_id, l.teacher_id, l.timestamp_m, l.teacher_notes, l.homework
-FROM lessons AS L
-INNER JOIN teachers AS T ON L.teacher_id = T.user_id
-INNER JOIN users AS U ON T.user_id = U.id
-WHERE U.email = $1
+const getLessonsByUser = `-- name: GetLessonsByUser :many
+SELECT l.id, l.student_id, l.teacher_id, l.teacher_notes, l.homework, l.ts
+FROM
+	lessons AS L
+	INNER JOIN users AS S ON L.student_id = S.id
+	INNER JOIN teachers AS T ON L.teacher_id = T.user_id
+	INNER JOIN users AS TU ON T.user_id = TU.id
+WHERE
+	(TU.email = $1 OR S.email = $1) --TODO replace with slugs
+	AND L.ts BETWEEN
+		    date_trunc('week', CURRENT_DATE) + make_interval(weeks => $2)
+		AND date_trunc('week', CURRENT_DATE) + make_interval(weeks => $2, days => 6)
+ORDER BY L.ts
 `
 
-func (q *Queries) GetLessonsByTeacher(ctx context.Context, email string) ([]Lesson, error) {
-	rows, err := q.db.Query(ctx, getLessonsByTeacher, email)
+type GetLessonsByUserParams struct {
+	Email string
+	Weeks int32
+}
+
+func (q *Queries) GetLessonsByUser(ctx context.Context, arg GetLessonsByUserParams) ([]Lesson, error) {
+	rows, err := q.db.Query(ctx, getLessonsByUser, arg.Email, arg.Weeks)
 	if err != nil {
 		return nil, err
 	}
@@ -88,9 +102,9 @@ func (q *Queries) GetLessonsByTeacher(ctx context.Context, email string) ([]Less
 			&i.ID,
 			&i.StudentID,
 			&i.TeacherID,
-			&i.TimestampM,
 			&i.TeacherNotes,
 			&i.Homework,
+			&i.Ts,
 		); err != nil {
 			return nil, err
 		}

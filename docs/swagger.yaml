@@ -302,21 +302,6 @@ paths:
       tags:
       - Courses
   /lessons/:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/lessons.LessonGet'
-      summary: Get all user's lessons
-      tags:
-      - Lessons
-      - by-teacher
-      - by-student
     post:
       consumes:
       - application/json
@@ -338,6 +323,27 @@ paths:
       tags:
       - Lessons
       - by teacher
+  /lessons/{week}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Week
+        in: path
+        name: week
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lessons.LessonGet'
+      summary: Get all user's lessons
+      tags:
+      - Lessons
+      - by-teacher
+      - by-student
   /ping:
     get:
       description: |-

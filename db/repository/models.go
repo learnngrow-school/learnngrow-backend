@@ -41,9 +41,9 @@ type Lesson struct {
 	ID           int32
 	StudentID    int32
 	TeacherID    int32
-	TimestampM   int32
 	TeacherNotes string
 	Homework     string
+	Ts           pgtype.Timestamptz
 }
 
 type SchoolReview struct {

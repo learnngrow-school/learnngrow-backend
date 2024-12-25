@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -17,15 +18,14 @@ import (
 	"learn-n-grow.dev/m/db/repository"
 	_ "learn-n-grow.dev/m/docs"
 	"learn-n-grow.dev/m/internal/middlewares"
+	"learn-n-grow.dev/m/lessons"
 	"learn-n-grow.dev/m/reviews"
 	"learn-n-grow.dev/m/teachers"
-	"learn-n-grow.dev/m/lessons"
 	"learn-n-grow.dev/m/utils"
 
 	"learn-n-grow.dev/m/auth"
 	"learn-n-grow.dev/m/internal"
 )
-
 
 func startServer() {
 	r := gin.Default()
@@ -66,13 +66,15 @@ func main() {
 
 	repo := repository.New(conn)
 	internal.Server = &internal.Config{
-		Repo: repo,
-		Conn: conn,
+		Repo:   repo,
+		Conn:   conn,
 		Domain: "localhost",
 	}
 
 	if len(os.Args) > 1 && os.Args[1] == "createsuperuser" {
-		cmd.CreateSuperuser(os.Args[2])
+		if err := cmd.CreateSuperuser(os.Args[2]); err != nil {
+			fmt.Println(err)
+		}
 		return
 	}
 
