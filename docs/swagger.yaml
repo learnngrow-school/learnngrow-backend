@@ -1,5 +1,10 @@
 basePath: /api/v1
 definitions:
+  admin.Subject:
+    properties:
+      title:
+        type: string
+    type: object
   auth.UserCreate:
     properties:
       firstName:
@@ -177,6 +182,40 @@ info:
   title: My magical API
   version: "1"
 paths:
+  /admin/subject:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/admin.Subject'
+            type: array
+      summary: Create a subject
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Subject
+        in: body
+        name: subject
+        required: true
+        schema:
+          $ref: '#/definitions/admin.Subject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Create a subject
+      tags:
+      - Admin
   /auth/login:
     post:
       consumes:
@@ -331,6 +370,7 @@ paths:
       - description: Week
         in: path
         name: week
+        required: true
         type: integer
       produces:
       - application/json
@@ -342,8 +382,8 @@ paths:
       summary: Get all user's lessons
       tags:
       - Lessons
-      - by-teacher
-      - by-student
+      - by teacher
+      - by student
   /ping:
     get:
       description: |-

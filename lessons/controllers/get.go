@@ -16,8 +16,8 @@ import (
 // GetMy Get all user's lessons
 // @summary Get all user's lessons
 // @tags    Lessons
-// @tags    by-teacher
-// @tags    by-student
+// @tags    by teacher
+// @tags    by student
 // @accept  json
 // @param   week path int true "Week"
 // @produce json

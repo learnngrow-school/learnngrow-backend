@@ -13,6 +13,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"learn-n-grow.dev/m/admin"
 	"learn-n-grow.dev/m/cmd"
 	"learn-n-grow.dev/m/courses"
 	"learn-n-grow.dev/m/db/repository"
@@ -41,6 +42,7 @@ func startServer() {
 	courses.AddRoutes(v1)
 	reviews.AddRoutes(v1)
 	lessons.AddRoutes(v1)
+	admin.AddRoutes(v1)
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/docs", func(ctx *gin.Context) {
