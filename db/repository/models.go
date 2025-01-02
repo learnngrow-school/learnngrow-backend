@@ -44,6 +44,7 @@ type Lesson struct {
 	TeacherNotes string
 	Homework     string
 	Ts           pgtype.Timestamptz
+	Classwork    string
 }
 
 type SchoolReview struct {
@@ -81,4 +82,5 @@ type User struct {
 	MiddleName  pgtype.Text
 	LastName    string
 	Slug        string
+	TgChatID    pgtype.Text
 }

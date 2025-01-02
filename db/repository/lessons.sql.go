@@ -13,12 +13,12 @@ import (
 
 const createLesson = `-- name: CreateLesson :one
 WITH student AS (
-	SELECT id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug
+	SELECT id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug, tg_chat_id
 	FROM users AS U
 	WHERE U.slug = $1
 	LIMIT 1
 ), teacher AS (
-	SELECT user_id, subject_ids, biography, id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug
+	SELECT user_id, subject_ids, biography, id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug, tg_chat_id
 	FROM
 		teachers AS T
 		INNER JOIN users AS U ON U.id = T.user_id
@@ -38,7 +38,7 @@ INSERT INTO lessons (
 ,	$4
 ,	$5
 )
-RETURNING id, student_id, teacher_id, teacher_notes, homework, ts
+RETURNING id, student_id, teacher_id, teacher_notes, homework, ts, classwork
 `
 
 type CreateLessonParams struct {
@@ -65,12 +65,13 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 		&i.TeacherNotes,
 		&i.Homework,
 		&i.Ts,
+		&i.Classwork,
 	)
 	return i, err
 }
 
 const getLessonsByUser = `-- name: GetLessonsByUser :many
-SELECT l.id, l.student_id, l.teacher_id, l.teacher_notes, l.homework, l.ts
+SELECT l.id, l.student_id, l.teacher_id, l.teacher_notes, l.homework, l.ts, l.classwork
 FROM
 	lessons AS L
 	INNER JOIN users AS S ON L.student_id = S.id
@@ -105,6 +106,7 @@ func (q *Queries) GetLessonsByUser(ctx context.Context, arg GetLessonsByUserPara
 			&i.TeacherNotes,
 			&i.Homework,
 			&i.Ts,
+			&i.Classwork,
 		); err != nil {
 			return nil, err
 		}

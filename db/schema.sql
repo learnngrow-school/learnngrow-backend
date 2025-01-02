@@ -132,7 +132,8 @@ CREATE TABLE public.lessons (
     teacher_id integer NOT NULL,
     teacher_notes text NOT NULL,
     homework text NOT NULL,
-    ts timestamp with time zone NOT NULL
+    ts timestamp with time zone NOT NULL,
+    classwork text DEFAULT ''::text NOT NULL
 );
 
 
@@ -283,7 +284,8 @@ CREATE TABLE public.users (
     first_name text DEFAULT 'default_first'::text NOT NULL,
     middle_name text,
     last_name text DEFAULT 'default_last'::text NOT NULL,
-    slug text NOT NULL
+    slug text NOT NULL,
+    tg_chat_id text DEFAULT ''::text NOT NULL
 );
 
 
@@ -582,4 +584,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20241205135042'),
     ('20241205140113'),
     ('20241205145557'),
-    ('20241226140029');
+    ('20241226140029'),
+    ('20241227230723');
