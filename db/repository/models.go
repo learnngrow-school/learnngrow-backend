@@ -82,5 +82,5 @@ type User struct {
 	MiddleName  pgtype.Text
 	LastName    string
 	Slug        string
-	TgChatID    pgtype.Text
+	TgChatID    string
 }
