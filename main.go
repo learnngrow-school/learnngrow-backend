@@ -49,7 +49,7 @@ func startServer() {
 		ctx.Redirect(http.StatusPermanentRedirect, "/docs/index.html")
 	})
 
-	r.Run()
+	r.Run(":8000")
 }
 
 // @title My magical API
