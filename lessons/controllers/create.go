@@ -3,8 +3,10 @@ package lessons
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jinzhu/copier"
 	"learn-n-grow.dev/m/db/repository"
 	"learn-n-grow.dev/m/internal"
@@ -37,7 +39,7 @@ func Create(c *gin.Context) {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return
 	}
-	
+
 	if !teacher.IsTeacher.Bool {
 		utils.Throw(c, http.StatusUnauthorized, errors.New("You have to be a teacher"))
 		return
@@ -67,11 +69,10 @@ func GetCreateLessonParams(lesson models.LessonCreate, teacher repository.User) 
 	// for maybe allowing superuser in the future
 	teacherSlug := teacher.Slug
 	return repository.CreateLessonParams{
-		Slug: lesson.StudentSlug,
-		Slug_2: teacherSlug,
-		TimestampM: int32(lesson.Timestamp / 60),
+		Slug:         lesson.StudentSlug,
+		Slug_2:       teacherSlug,
+		Ts:           pgtype.Timestamptz{Time: time.Unix(lesson.Timestamp, 0), Valid: true},
 		TeacherNotes: lesson.TeacherNotes,
-		Homework: lesson.Homework,
+		Homework:     lesson.Homework,
 	}
 }
-

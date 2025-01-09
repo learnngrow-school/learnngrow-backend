@@ -3,23 +3,26 @@ package lessons
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
+	"learn-n-grow.dev/m/db/repository"
 	"learn-n-grow.dev/m/internal"
-	"learn-n-grow.dev/m/utils"
 	models "learn-n-grow.dev/m/lessons/models"
+	"learn-n-grow.dev/m/utils"
 )
 
 // GetMy Get all user's lessons
 // @summary Get all user's lessons
 // @tags    Lessons
-// @tags    by-teacher
-// @tags    by-student
+// @tags    by teacher
+// @tags    by student
 // @accept  json
+// @param   week path int true "Week"
 // @produce json
 // @success 200 {object} models.LessonGet[]
-// @router  /lessons/ [get]
+// @router  /lessons/{week} [get]
 func GetMy(c *gin.Context) {
 	var err error
 
@@ -31,7 +34,12 @@ func GetMy(c *gin.Context) {
 	}
 	email, _ = emailAny.(string)
 
-	lessonsDb, err := internal.Server.Repo.GetLessonsByTeacher(c, email)
+	timeframe := GetTimeframe(c)
+	params := repository.GetLessonsByUserParams{
+		Email: email,
+		Weeks: int32(timeframe),
+	}
+	lessonsDb, err := internal.Server.Repo.GetLessonsByUser(c, params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return
@@ -41,7 +49,7 @@ func GetMy(c *gin.Context) {
 	copier.CopyWithOption(&lessons, &lessonsDb, copier.Option{DeepCopy: true})
 
 	for i := range lessons {
-		lessons[i].Timestamp = 60 * int64(lessonsDb[i].TimestampM)
+		lessons[i].Timestamp = int64(lessonsDb[i].Ts.Time.Unix())
 	}
 
 	c.JSON(http.StatusOK, lessons)
@@ -52,9 +60,11 @@ func GetMy(c *gin.Context) {
 	// 	utils.Throw(c, http.StatusInternalServerError, err)
 	// 	return
 	// }
-	//
-	// if !user.IsTeacher.Bool {
-	// 	utils.Throw(c, http.StatusUnauthorized, errors.New("You have to be a teacher"))
-	// 	return
-	// }
+}
+
+func GetTimeframe(c *gin.Context) int {
+	stringValue := c.Param("week")
+
+	value, _ := strconv.Atoi(stringValue)
+	return value
 }

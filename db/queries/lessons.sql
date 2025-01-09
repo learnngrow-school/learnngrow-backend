@@ -15,7 +15,7 @@ WITH student AS (
 INSERT INTO lessons (
 	student_id
 ,	teacher_id
-,	timestamp_m
+,	ts
 ,	teacher_notes
 ,	homework
 ) VALUES (
@@ -27,29 +27,17 @@ INSERT INTO lessons (
 )
 RETURNING *;
 
--- name: GetLessonsByTeacher :many
-WITH week_start_datetime AS (
-	SELECT
-		CURRENT_DATE - (
-			SELECT EXTRACT(ISODOW FROM now())
-		)::INTEGER + 1 AS ts
-)
-week AS (
-	SELECT
-		(TS) / 60)::INTEGER AS wstart
-	,	(TS + 7) / 60)::INTEGER AS wend
-	FROM week_start_datetime AS TS
-)
+-- name: GetLessonsByUser :many
 SELECT L.*
 FROM
 	lessons AS L
+	INNER JOIN users AS S ON L.student_id = S.id
 	INNER JOIN teachers AS T ON L.teacher_id = T.user_id
-	INNER JOIN users AS U ON T.user_id = U.id
+	INNER JOIN users AS TU ON T.user_id = TU.id
 WHERE
-	U.email = $1 --TODO replace with slugs
-	AND L.timestamp_m BETWEEN
-		(SELECT wstart FROM week) AND (SELECT webd FROM week)
-ORDER BY L.timestamp_m;
-
-
+	(TU.email = $1 OR S.email = $1) --TODO replace with slugs
+	AND L.ts BETWEEN
+		    date_trunc('week', CURRENT_DATE) + make_interval(weeks => $2)
+		AND date_trunc('week', CURRENT_DATE) + make_interval(weeks => $2, days => 6)
+ORDER BY L.ts;
 
