@@ -26,6 +26,12 @@ type UserGet struct {
 	Slug       string `json:"slug"`
 }
 
+type UserMe struct {
+	UserGet
+	IsTeacher   bool `json:"isTeacher"`
+	IsSuperuser bool `json:"isSuperuser"`
+}
+
 func Hash[T repository.CreateUserParams | repository.CreateTeacherParams] (params *T, password string) (hashed []byte, err error) {
 	hashed, err = auth.Hash([]byte(password))
 

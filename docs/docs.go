@@ -15,6 +15,59 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/subject": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Create a subject",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/admin.Subject"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Create a subject",
+                "parameters": [
+                    {
+                        "description": "Subject",
+                        "name": "subject",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin.Subject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "consumes": [
@@ -42,7 +95,7 @@ const docTemplate = `{
                     "202": {
                         "description": "Accepted",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
+                            "$ref": "#/definitions/auth.UserMe"
                         }
                     }
                 }
@@ -83,7 +136,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserGet"
+                            "$ref": "#/definitions/auth.UserMe"
                         }
                     }
                 }
@@ -204,6 +257,73 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/courses.CourseWithData"
+                        }
+                    }
+                }
+            }
+        },
+        "/lessons/": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lessons",
+                    "by teacher"
+                ],
+                "summary": "Create a lesson",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/lessons.LessonCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/lessons.LessonGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/lessons/{week}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lessons",
+                    "by teacher",
+                    "by student"
+                ],
+                "summary": "Get all user's lessons",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Week",
+                        "name": "week",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lessons.LessonGet"
                         }
                     }
                 }
@@ -367,18 +487,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "admin.Subject": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "auth.UserCreate": {
             "type": "object",
             "required": [
-                "email",
                 "firstName",
                 "lastName",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "firstName": {
                     "type": "string"
                 },
@@ -390,15 +515,15 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                },
+                "phone": {
+                    "type": "string"
                 }
             }
         },
         "auth.UserGet": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "firstName": {
                     "type": "string"
                 },
@@ -406,6 +531,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "middleName": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 },
                 "slug": {
@@ -416,14 +544,40 @@ const docTemplate = `{
         "auth.UserLogin": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.UserMe": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "isSuperuser": {
+                    "type": "boolean"
+                },
+                "isTeacher": {
+                    "type": "boolean"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "middleName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "slug": {
                     "type": "string"
                 }
             }
@@ -513,6 +667,40 @@ const docTemplate = `{
             "properties": {
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "lessons.LessonCreate": {
+            "type": "object",
+            "properties": {
+                "homework": {
+                    "type": "string"
+                },
+                "studentSlug": {
+                    "type": "string"
+                },
+                "teacherNotes": {
+                    "type": "string"
+                },
+                "teacherSlug": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "lessons.LessonGet": {
+            "type": "object",
+            "properties": {
+                "homework": {
+                    "type": "string"
+                },
+                "teacherNotes": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
                 }
             }
         },

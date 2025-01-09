@@ -37,6 +37,16 @@ type CoursesTeacher struct {
 	TeacherID int32
 }
 
+type Lesson struct {
+	ID           int32
+	StudentID    int32
+	TeacherID    int32
+	TeacherNotes string
+	Homework     string
+	Ts           pgtype.Timestamptz
+	Classwork    string
+}
+
 type SchoolReview struct {
 	ID         int32
 	Details    string
@@ -72,4 +82,5 @@ type User struct {
 	MiddleName  pgtype.Text
 	LastName    string
 	Slug        string
+	TgChatID    string
 }

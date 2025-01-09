@@ -1,9 +1,12 @@
 basePath: /api/v1
 definitions:
+  admin.Subject:
+    properties:
+      title:
+        type: string
+    type: object
   auth.UserCreate:
     properties:
-      email:
-        type: string
       firstName:
         type: string
       lastName:
@@ -12,34 +15,53 @@ definitions:
         type: string
       password:
         type: string
+      phone:
+        type: string
     required:
-    - email
     - firstName
     - lastName
     - password
+    - phone
     type: object
   auth.UserGet:
     properties:
-      email:
-        type: string
       firstName:
         type: string
       lastName:
         type: string
       middleName:
+        type: string
+      phone:
         type: string
       slug:
         type: string
     type: object
   auth.UserLogin:
     properties:
-      email:
-        type: string
       password:
         type: string
+      phone:
+        type: string
     required:
-    - email
     - password
+    - phone
+    type: object
+  auth.UserMe:
+    properties:
+      firstName:
+        type: string
+      isSuperuser:
+        type: boolean
+      isTeacher:
+        type: boolean
+      lastName:
+        type: string
+      middleName:
+        type: string
+      phone:
+        type: string
+      slug:
+        type: string
     type: object
   courses.Category:
     properties:
@@ -100,6 +122,28 @@ definitions:
       title:
         type: string
     type: object
+  lessons.LessonCreate:
+    properties:
+      homework:
+        type: string
+      studentSlug:
+        type: string
+      teacherNotes:
+        type: string
+      teacherSlug:
+        type: string
+      timestamp:
+        type: integer
+    type: object
+  lessons.LessonGet:
+    properties:
+      homework:
+        type: string
+      teacherNotes:
+        type: string
+      timestamp:
+        type: integer
+    type: object
   reviews.ReviewCreate:
     properties:
       authorName:
@@ -138,6 +182,40 @@ info:
   title: My magical API
   version: "1"
 paths:
+  /admin/subject:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/admin.Subject'
+            type: array
+      summary: Create a subject
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Subject
+        in: body
+        name: subject
+        required: true
+        schema:
+          $ref: '#/definitions/admin.Subject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Create a subject
+      tags:
+      - Admin
   /auth/login:
     post:
       consumes:
@@ -155,7 +233,7 @@ paths:
         "202":
           description: Accepted
           schema:
-            $ref: '#/definitions/auth.UserGet'
+            $ref: '#/definitions/auth.UserMe'
       summary: Log in user, issue JWT into Cookie
       tags:
       - Auth
@@ -181,7 +259,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.UserGet'
+            $ref: '#/definitions/auth.UserMe'
       summary: Get current user data
       tags:
       - Auth
@@ -262,6 +340,50 @@ paths:
       summary: Get one course by id
       tags:
       - Courses
+  /lessons/:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/lessons.LessonCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/lessons.LessonGet'
+      summary: Create a lesson
+      tags:
+      - Lessons
+      - by teacher
+  /lessons/{week}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Week
+        in: path
+        name: week
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lessons.LessonGet'
+      summary: Get all user's lessons
+      tags:
+      - Lessons
+      - by teacher
+      - by student
   /ping:
     get:
       description: |-

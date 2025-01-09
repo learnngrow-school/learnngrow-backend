@@ -26,7 +26,7 @@ const createUser = `-- name: CreateUser :one
 INSERT INTO users (email, PASSWORD, is_teacher, first_name, middle_name, last_name, slug)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING
-    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug
+    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug, tg_chat_id
 `
 
 type CreateUserParams struct {
@@ -60,13 +60,14 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.MiddleName,
 		&i.LastName,
 		&i.Slug,
+		&i.TgChatID,
 	)
 	return i, err
 }
 
 const getUser = `-- name: GetUser :one
 SELECT
-    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug
+    id, email, password, is_teacher, is_superuser, first_name, middle_name, last_name, slug, tg_chat_id
 FROM
     users
 WHERE
@@ -87,6 +88,7 @@ func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
 		&i.MiddleName,
 		&i.LastName,
 		&i.Slug,
+		&i.TgChatID,
 	)
 	return i, err
 }

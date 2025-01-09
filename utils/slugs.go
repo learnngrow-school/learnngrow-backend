@@ -10,7 +10,7 @@ var (
 	AlphabetLen int
 )
 
-func SetupSlugs() []rune {
+func SetupSlugs() {
 	sb := strings.Builder{}
 	for i := range(26) {
 		sb.WriteRune(rune('a') + rune(i))
@@ -20,7 +20,8 @@ func SetupSlugs() []rune {
 		}
 	}
 	sb.WriteString("-_")
-	return []rune(sb.String())
+	Alphabet = []rune(sb.String())
+	AlphabetLen = len(Alphabet)
 }
 
 func GetSlug(l int) string {
