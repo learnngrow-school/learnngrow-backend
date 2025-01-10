@@ -15,15 +15,15 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/subject": {
+        "/admin/subjects": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "Subjects"
                 ],
-                "summary": "Create a subject",
+                "summary": "Get list of subjects",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -44,7 +44,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "By admin",
+                    "Subjects"
                 ],
                 "summary": "Create a subject",
                 "parameters": [

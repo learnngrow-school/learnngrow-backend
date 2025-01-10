@@ -182,7 +182,7 @@ info:
   title: My magical API
   version: "1"
 paths:
-  /admin/subject:
+  /admin/subjects:
     get:
       produces:
       - application/json
@@ -193,9 +193,9 @@ paths:
             items:
               $ref: '#/definitions/admin.Subject'
             type: array
-      summary: Create a subject
+      summary: Get list of subjects
       tags:
-      - Admin
+      - Subjects
     post:
       consumes:
       - application/json
@@ -215,7 +215,8 @@ paths:
             type: string
       summary: Create a subject
       tags:
-      - Admin
+      - By admin
+      - Subjects
   /auth/login:
     post:
       consumes:

@@ -9,13 +9,13 @@ import (
 	"learn-n-grow.dev/m/internal"
 )
 
-// CreateSubject Create a subject
-// @summary Create a subject
+// CreateSubject Get list of subjects
+// @summary Get list of subjects
 // @produce json
-// @tags    Admin
+// @tags    Subjects
 // @success 200 {object} []models.Subject
-// @router  /admin/subject [get]
-func GetSubject(c *gin.Context) {
+// @router  /admin/subjects [get]
+func GetSubjects(c *gin.Context) {
 	subjectDb, _ := internal.Server.Repo.GetSubjects(c)
 	var subjects []models.Subject
 	copier.CopyWithOption(&subjects, &subjectDb, copier.Option{DeepCopy: true})

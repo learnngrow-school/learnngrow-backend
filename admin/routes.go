@@ -9,7 +9,7 @@ import (
 func AddRoutes(r *gin.RouterGroup) {
 	g := r.Group("/admin")
 	{
-		g.POST("/subject", middlewares.Superuser(), controllers.CreateSubject)
-		g.GET("/subject", controllers.GetSubject)
+		g.POST("/subjects", middlewares.Superuser(), controllers.CreateSubject)
+		g.GET("/subjects", controllers.GetSubjects)
 	}
 }

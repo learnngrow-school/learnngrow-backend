@@ -15,9 +15,10 @@ import (
 // @accept  json
 // @produce json
 // @param   subject body models.Subject true "Subject"
-// @tags    Admin
+// @tags    By admin
+// @tags    Subjects
 // @success 200 {object} string
-// @router  /admin/subject [post]
+// @router  /admin/subjects [post]
 func CreateSubject(c *gin.Context) {
 	var subject models.Subject
 	if err := c.ShouldBind(&subject); err != nil {
