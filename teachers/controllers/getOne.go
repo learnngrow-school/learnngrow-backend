@@ -30,6 +30,7 @@ func GetOne(c *gin.Context) {
 	teacher, err := internal.Server.Repo.GetTeacherBySlug(context.Background(), slugParam)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	var teacherRes models.TeacherGet

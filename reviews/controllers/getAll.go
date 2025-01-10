@@ -18,13 +18,14 @@ import (
 // @produce json
 // @tags    Reviews
 // @success 200 {object} []reviews.ReviewGet
-// @router  /reviews [get]
+// @router  /reviews/ [get]
 func GetAll(c *gin.Context) {
 	var err error
 	var queryRes []repository.SchoolReview
 	queryRes, err = internal.Server.Repo.GetAllSchoolReviews(context.Background())
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	var res []reviews.ReviewGet

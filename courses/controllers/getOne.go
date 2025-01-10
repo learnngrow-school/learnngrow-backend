@@ -24,7 +24,8 @@ func GetOneCourse(c *gin.Context) {
 
 	course, err := internal.Server.Repo.GetCourseBySlug(context.Background(), slugParam)
 	if err != nil {
-		utils.Throw(c, http.StatusInternalServerError, err)	
+		utils.Throw(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	var courseRes courses.CourseWithData

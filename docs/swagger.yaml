@@ -422,7 +422,7 @@ paths:
       summary: Ping API
       tags:
       - base
-  /reviews:
+  /reviews/:
     get:
       consumes:
       - application/json
@@ -458,6 +458,22 @@ paths:
       summary: Create review
       tags:
       - Reviews
+  /students/:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/auth.UserGet'
+            type: array
+      summary: Get all students
+      tags:
+      - Students
+      - _ By admin
+      - _ By teacher
   /teachers/:
     get:
       consumes:

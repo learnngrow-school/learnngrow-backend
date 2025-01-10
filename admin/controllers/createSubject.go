@@ -23,6 +23,7 @@ func CreateSubject(c *gin.Context) {
 	var subject models.Subject
 	if err := c.ShouldBind(&subject); err != nil {
 		utils.Throw(c, http.StatusBadRequest, errors.New("invalid request format"))
+		return
 	}
 	internal.Server.Repo.CreateSubject(c, subject.Title)
 	c.JSON(http.StatusOK, "ok")

@@ -350,7 +350,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/reviews": {
+        "/reviews/": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -401,6 +401,30 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/reviews.ReviewGet"
+                        }
+                    }
+                }
+            }
+        },
+        "/students/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Students",
+                    "_ By admin",
+                    "_ By teacher"
+                ],
+                "summary": "Get all students",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/auth.UserGet"
+                            }
                         }
                     }
                 }
