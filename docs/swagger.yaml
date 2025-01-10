@@ -422,7 +422,7 @@ paths:
       summary: Ping API
       tags:
       - base
-  /reviews:
+  /reviews/:
     get:
       consumes:
       - application/json

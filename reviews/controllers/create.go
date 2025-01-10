@@ -20,7 +20,7 @@ import (
 // @param   user body ReviewCreate true "User"
 // @tags    Reviews
 // @success 201 {object} ReviewGet
-// @router  /reviews [post]
+// @router  /reviews/ [post]
 func Create(c *gin.Context) {
 	if email, emailIsSet := c.Get("x-email"); !emailIsSet || email != "admin" {
 		utils.Throw(c, http.StatusUnauthorized, errors.New("You are not superuser"))
@@ -32,7 +32,7 @@ func Create(c *gin.Context) {
 	if err = c.ShouldBindJSON(&reviewReq); err != nil {
 		utils.Throw(c, http.StatusUnprocessableEntity, err)
 	}
-	
+
 	var params repository.CreateReviewParams
 	copier.Copy(&params, &reviewReq)
 

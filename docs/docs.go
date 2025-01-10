@@ -350,7 +350,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/reviews": {
+        "/reviews/": {
             "get": {
                 "consumes": [
                     "application/json"

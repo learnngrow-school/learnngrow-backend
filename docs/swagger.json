@@ -343,7 +343,7 @@
                 }
             }
         },
-        "/reviews": {
+        "/reviews/": {
             "get": {
                 "consumes": [
                     "application/json"
