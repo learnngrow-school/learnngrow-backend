@@ -31,6 +31,7 @@ func Create(c *gin.Context) {
 	var reviewReq reviews.ReviewCreate
 	if err = c.ShouldBindJSON(&reviewReq); err != nil {
 		utils.Throw(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	var params repository.CreateReviewParams
@@ -41,6 +42,7 @@ func Create(c *gin.Context) {
 	queryRes, err = internal.Server.Repo.CreateReview(context.Background(), params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	var res reviews.ReviewGet

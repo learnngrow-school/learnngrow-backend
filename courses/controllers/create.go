@@ -31,9 +31,10 @@ func CreateCourse(c *gin.Context) {
 
 	var err error
 	var course models.CourseCreate
-	
+
 	if err = c.ShouldBindJSON(&course); err != nil {
 		utils.Throw(c, http.StatusBadRequest, err)
+		return
 	}
 
 	params := *getCreateCourseParams(&course)
@@ -44,13 +45,13 @@ func CreateCourse(c *gin.Context) {
 
 func getCreateCourseParams(course *models.CourseCreate) *repository.CreateCourseParams {
 	params := repository.CreateCourseParams{
-		Year: pgtype.Int2 {
+		Year: pgtype.Int2{
 			Int16: course.Year,
 			Valid: true,
 		},
-		Description: pgtype.Text {
+		Description: pgtype.Text{
 			String: course.Description,
-			Valid: course.Description != "",
+			Valid:  course.Description != "",
 		},
 		Slug: utils.GetSlug(6),
 	}

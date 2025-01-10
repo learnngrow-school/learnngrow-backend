@@ -23,6 +23,7 @@ func GetAll(c *gin.Context) {
 	teachers, err := internal.Server.Repo.GetAllTeachers(context.Background())
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	var teachersRes models.TeachersGet

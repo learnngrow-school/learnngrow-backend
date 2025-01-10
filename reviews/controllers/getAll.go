@@ -25,6 +25,7 @@ func GetAll(c *gin.Context) {
 	queryRes, err = internal.Server.Repo.GetAllSchoolReviews(context.Background())
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	var res []reviews.ReviewGet
