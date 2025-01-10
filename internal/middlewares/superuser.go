@@ -10,8 +10,13 @@ import (
 
 func Superuser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if email, emailIsSet := c.Get("x-email"); !emailIsSet || email != "admin" {
+		if !checkSuperuser(c) {
 			utils.Throw(c, http.StatusUnauthorized, errors.New("You are not superuser"))
 		}
 	}
+}
+
+func checkSuperuser(c *gin.Context) bool {
+	email, emailIsSet := c.Get("x-email")
+	return emailIsSet && email == "admin"
 }

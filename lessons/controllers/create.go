@@ -1,7 +1,6 @@
 package lessons
 
 import (
-	"errors"
 	"net/http"
 	"time"
 
@@ -26,32 +25,13 @@ import (
 func Create(c *gin.Context) {
 	var err error
 
-	var email string
-	emailAny, ok := c.Get("x-email")
-	if !ok {
-		utils.Throw(c, http.StatusUnauthorized, errors.New("You have to be logged in"))
-		return
-	}
-	email, _ = emailAny.(string)
-
-	teacher, err := internal.Server.Repo.GetUser(c, email)
-	if err != nil {
-		utils.Throw(c, http.StatusInternalServerError, err)
-		return
-	}
-
-	if !teacher.IsTeacher.Bool {
-		utils.Throw(c, http.StatusUnauthorized, errors.New("You have to be a teacher"))
-		return
-	}
-
 	var lesson models.LessonCreate
 	if err = c.ShouldBindJSON(&lesson); err != nil {
 		utils.Throw(c, http.StatusBadRequest, err)
 		return
 	}
 
-	params := GetCreateLessonParams(lesson, teacher)
+	params := GetCreateLessonParams(lesson)
 	result, err := internal.Server.Repo.CreateLesson(c, params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
@@ -65,12 +45,10 @@ func Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, lessonResult)
 }
 
-func GetCreateLessonParams(lesson models.LessonCreate, teacher repository.User) repository.CreateLessonParams {
-	// for maybe allowing superuser in the future
-	teacherSlug := teacher.Slug
+func GetCreateLessonParams(lesson models.LessonCreate) repository.CreateLessonParams {
 	return repository.CreateLessonParams{
 		Slug:         lesson.StudentSlug,
-		Slug_2:       teacherSlug,
+		Slug_2:       lesson.TeacherSlug,
 		Ts:           pgtype.Timestamptz{Time: time.Unix(lesson.Timestamp, 0), Valid: true},
 		TeacherNotes: lesson.TeacherNotes,
 		Homework:     lesson.Homework,
