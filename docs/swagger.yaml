@@ -7,6 +7,8 @@ definitions:
     type: object
   admin.Subject:
     properties:
+      id:
+        type: integer
       title:
         type: string
     type: object

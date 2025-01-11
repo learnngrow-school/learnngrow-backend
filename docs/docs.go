@@ -556,6 +556,9 @@ const docTemplate = `{
         "admin.Subject": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "title": {
                     "type": "string"
                 }

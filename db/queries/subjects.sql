@@ -3,5 +3,6 @@ INSERT INTO subjects (title)
 VALUES ($1);
 
 -- name: GetSubjects :many
-SELECT * FROM subjects;
+SELECT * FROM subjects
+ORDER BY id;
 
