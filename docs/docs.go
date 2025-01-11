@@ -15,6 +15,39 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/files": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Files",
+                    "_ By admin",
+                    "_ By teacher"
+                ],
+                "summary": "Upload a file",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "File",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/admin.Slug"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/subjects": {
             "get": {
                 "produces": [
@@ -512,6 +545,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "admin.Slug": {
+            "type": "object",
+            "properties": {
+                "slug": {
+                    "type": "string"
+                }
+            }
+        },
         "admin.Subject": {
             "type": "object",
             "properties": {
@@ -698,6 +739,12 @@ const docTemplate = `{
         "lessons.LessonCreate": {
             "type": "object",
             "properties": {
+                "duration": {
+                    "type": "integer"
+                },
+                "fileSlug": {
+                    "type": "string"
+                },
                 "homework": {
                     "type": "string"
                 },
@@ -718,6 +765,12 @@ const docTemplate = `{
         "lessons.LessonGet": {
             "type": "object",
             "properties": {
+                "duration": {
+                    "type": "integer"
+                },
+                "fileSlug": {
+                    "type": "string"
+                },
                 "homework": {
                     "type": "string"
                 },

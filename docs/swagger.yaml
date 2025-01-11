@@ -1,5 +1,10 @@
 basePath: /api/v1
 definitions:
+  admin.Slug:
+    properties:
+      slug:
+        type: string
+    type: object
   admin.Subject:
     properties:
       title:
@@ -124,6 +129,10 @@ definitions:
     type: object
   lessons.LessonCreate:
     properties:
+      duration:
+        type: integer
+      fileSlug:
+        type: string
       homework:
         type: string
       studentSlug:
@@ -137,6 +146,10 @@ definitions:
     type: object
   lessons.LessonGet:
     properties:
+      duration:
+        type: integer
+      fileSlug:
+        type: string
       homework:
         type: string
       teacherNotes:
@@ -182,6 +195,28 @@ info:
   title: My magical API
   version: "1"
 paths:
+  /admin/files:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: File
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/admin.Slug'
+      summary: Upload a file
+      tags:
+      - Files
+      - _ By admin
+      - _ By teacher
   /admin/subjects:
     get:
       produces:

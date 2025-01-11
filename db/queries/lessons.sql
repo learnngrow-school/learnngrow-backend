@@ -18,12 +18,16 @@ INSERT INTO lessons (
 ,	ts
 ,	teacher_notes
 ,	homework
+,	duration
+,	file_slug
 ) VALUES (
 	(SELECT id FROM student)
 ,	(SELECT id FROM teacher)
 ,	$3
 ,	$4
 ,	$5
+,	$6
+,	$7
 )
 RETURNING *;
 

@@ -11,5 +11,6 @@ func AddRoutes(r *gin.RouterGroup) {
 	{
 		g.POST("/subjects", middlewares.Superuser(), controllers.CreateSubject)
 		g.GET("/subjects", controllers.GetSubjects)
+		g.POST("/files", middlewares.SuperTeacher(), controllers.UploadFile)
 	}
 }

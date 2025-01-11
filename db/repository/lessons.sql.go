@@ -31,14 +31,18 @@ INSERT INTO lessons (
 ,	ts
 ,	teacher_notes
 ,	homework
+,	duration
+,	file_slug
 ) VALUES (
 	(SELECT id FROM student)
 ,	(SELECT id FROM teacher)
 ,	$3
 ,	$4
 ,	$5
+,	$6
+,	$7
 )
-RETURNING id, student_id, teacher_id, teacher_notes, homework, ts, classwork
+RETURNING id, student_id, teacher_id, teacher_notes, homework, ts, classwork, duration, file_slug
 `
 
 type CreateLessonParams struct {
@@ -47,6 +51,8 @@ type CreateLessonParams struct {
 	Ts           pgtype.Timestamptz
 	TeacherNotes string
 	Homework     string
+	Duration     int16
+	FileSlug     pgtype.Text
 }
 
 func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Lesson, error) {
@@ -56,6 +62,8 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 		arg.Ts,
 		arg.TeacherNotes,
 		arg.Homework,
+		arg.Duration,
+		arg.FileSlug,
 	)
 	var i Lesson
 	err := row.Scan(
@@ -66,12 +74,14 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 		&i.Homework,
 		&i.Ts,
 		&i.Classwork,
+		&i.Duration,
+		&i.FileSlug,
 	)
 	return i, err
 }
 
 const getLessonsByUser = `-- name: GetLessonsByUser :many
-SELECT l.id, l.student_id, l.teacher_id, l.teacher_notes, l.homework, l.ts, l.classwork
+SELECT l.id, l.student_id, l.teacher_id, l.teacher_notes, l.homework, l.ts, l.classwork, l.duration, l.file_slug
 FROM
 	lessons AS L
 	INNER JOIN users AS S ON L.student_id = S.id
@@ -107,6 +117,8 @@ func (q *Queries) GetLessonsByUser(ctx context.Context, arg GetLessonsByUserPara
 			&i.Homework,
 			&i.Ts,
 			&i.Classwork,
+			&i.Duration,
+			&i.FileSlug,
 		); err != nil {
 			return nil, err
 		}

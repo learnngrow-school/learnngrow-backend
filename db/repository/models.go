@@ -13,6 +13,10 @@ type Category struct {
 	Title string
 }
 
+type ConfigTbl struct {
+	MaxFilesize pgtype.Int4
+}
+
 type Course struct {
 	ID          int32
 	Title       string
@@ -37,6 +41,14 @@ type CoursesTeacher struct {
 	TeacherID int32
 }
 
+type File struct {
+	ID    int32
+	Slug  string
+	Fname string
+	Fsize int32
+	Fdata []byte
+}
+
 type Lesson struct {
 	ID           int32
 	StudentID    int32
@@ -45,6 +57,8 @@ type Lesson struct {
 	Homework     string
 	Ts           pgtype.Timestamptz
 	Classwork    string
+	Duration     int16
+	FileSlug     pgtype.Text
 }
 
 type SchoolReview struct {

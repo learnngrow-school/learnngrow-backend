@@ -14,6 +14,26 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: config_tbl; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.config_tbl (
+    max_filesize integer
+);
+
+
+--
+-- Name: config(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.config() RETURNS public.config_tbl
+    LANGUAGE sql IMMUTABLE
+    AS $$
+	SELECT * FROM config_tbl
+$$;
+
+
+--
 -- Name: categories; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -123,6 +143,40 @@ CREATE TABLE public.courses_teachers (
 
 
 --
+-- Name: files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.files (
+    id integer NOT NULL,
+    slug text NOT NULL,
+    fname text NOT NULL,
+    fsize integer NOT NULL,
+    fdata bytea NOT NULL,
+    CONSTRAINT fsizechk CHECK (((fsize > 0) AND (fsize > (public.config()).max_filesize)))
+);
+
+
+--
+-- Name: files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.files_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.files_id_seq OWNED BY public.files.id;
+
+
+--
 -- Name: lessons; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -133,7 +187,10 @@ CREATE TABLE public.lessons (
     teacher_notes text NOT NULL,
     homework text NOT NULL,
     ts timestamp with time zone NOT NULL,
-    classwork text DEFAULT ''::text NOT NULL
+    classwork text DEFAULT ''::text NOT NULL,
+    duration smallint DEFAULT (60)::smallint NOT NULL,
+    file_slug text,
+    CONSTRAINT durationchk CHECK (((duration > 0) AND (duration <= 360)))
 );
 
 
@@ -331,6 +388,13 @@ ALTER TABLE ONLY public.courses ALTER COLUMN id SET DEFAULT nextval('public.cour
 
 
 --
+-- Name: files id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files ALTER COLUMN id SET DEFAULT nextval('public.files_id_seq'::regclass);
+
+
+--
 -- Name: lessons id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -411,6 +475,22 @@ ALTER TABLE ONLY public.courses_teachers
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT email_unique UNIQUE (email);
+
+
+--
+-- Name: files files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files
+    ADD CONSTRAINT files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: files files_slug_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files
+    ADD CONSTRAINT files_slug_key UNIQUE (slug);
 
 
 --
@@ -540,6 +620,14 @@ ALTER TABLE ONLY public.teachers
 
 
 --
+-- Name: lessons lessons_file_slug_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.lessons
+    ADD CONSTRAINT lessons_file_slug_fkey FOREIGN KEY (file_slug) REFERENCES public.files(slug);
+
+
+--
 -- Name: lessons lessons_student_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -585,4 +673,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20241205140113'),
     ('20241205145557'),
     ('20241226140029'),
-    ('20241227230723');
+    ('20241227230723'),
+    ('20250110200554');

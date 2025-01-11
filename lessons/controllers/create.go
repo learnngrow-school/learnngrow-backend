@@ -46,11 +46,17 @@ func Create(c *gin.Context) {
 }
 
 func GetCreateLessonParams(lesson models.LessonCreate) repository.CreateLessonParams {
+	slug := pgtype.Text{
+		String: lesson.FileSlug,
+		Valid:  len(lesson.FileSlug) > 5,
+	}
 	return repository.CreateLessonParams{
 		Slug:         lesson.StudentSlug,
 		Slug_2:       lesson.TeacherSlug,
 		Ts:           pgtype.Timestamptz{Time: time.Unix(lesson.Timestamp, 0), Valid: true},
 		TeacherNotes: lesson.TeacherNotes,
 		Homework:     lesson.Homework,
+		Duration:     lesson.Duration,
+		FileSlug:     slug,
 	}
 }
