@@ -2,6 +2,7 @@ package auth
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"learn-n-grow.dev/m/internal"
@@ -14,6 +15,6 @@ import (
 // @success 200 {object} string
 // @router  /auth/logout [post]
 func Logout(c *gin.Context) {
-	c.SetCookie("token", "", -1, "/", internal.Server.Domain, false, true)
+	c.SetCookie("token", "", -1, "/", internal.Server.Domain, os.Getenv("ENV") == "prod", true)
 	c.JSON(http.StatusOK, "ok")
 }

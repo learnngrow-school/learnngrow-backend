@@ -1,6 +1,8 @@
 package middlewares
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	jwtUtils "learn-n-grow.dev/m/auth/utils"
 	"learn-n-grow.dev/m/internal"
@@ -16,10 +18,10 @@ func JWTMiddleware() gin.HandlerFunc {
 			c.Next()
 			return
 		}
-		
+
 		jwtClaims, err := jwtUtils.GetData(token)
 		if err != nil {
-			c.SetCookie("token", "", -1, "/", internal.Server.Domain, false, true)
+			c.SetCookie("token", "", -1, "/", internal.Server.Domain, os.Getenv("ENV") == "prod", true)
 			c.Set("x-jwt-err", err)
 			c.Next()
 			return

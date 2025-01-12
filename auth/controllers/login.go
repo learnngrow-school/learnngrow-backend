@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
@@ -53,6 +54,6 @@ func Login(c *gin.Context) {
 	userMe := auth.UserMe{}
 	copier.Copy(&userMe, &record)
 
-	c.SetCookie("token", jwt, int(jwtUtil.ExpTime), "/", internal.Server.Domain, false, true)
+	c.SetCookie("token", jwt, int(jwtUtil.ExpTime), "/", internal.Server.Domain, os.Getenv("ENV") == "prod", true)
 	c.JSON(http.StatusAccepted, userMe)
 }
