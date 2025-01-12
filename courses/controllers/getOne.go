@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"learn-n-grow.dev/m/courses/models"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
@@ -22,7 +21,7 @@ import (
 func GetOneCourse(c *gin.Context) {
 	slugParam := c.Param("slug")
 
-	course, err := internal.Server.Repo.GetCourseBySlug(context.Background(), slugParam)
+	course, err := utils.GetRepo(c).GetCourseBySlug(context.Background(), slugParam)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return

@@ -10,7 +10,6 @@ import (
 	"github.com/jinzhu/copier"
 	models "learn-n-grow.dev/m/courses/models"
 	"learn-n-grow.dev/m/db/repository"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
@@ -38,7 +37,7 @@ func CreateCourse(c *gin.Context) {
 	}
 
 	params := *getCreateCourseParams(&course)
-	record, err := internal.Server.Repo.CreateCourse(context.Background(), params)
+	record, err := utils.GetRepo(c).CreateCourse(context.Background(), params)
 
 	c.JSON(http.StatusCreated, record)
 }

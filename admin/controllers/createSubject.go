@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	models "learn-n-grow.dev/m/admin/models"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
@@ -25,6 +24,6 @@ func CreateSubject(c *gin.Context) {
 		utils.Throw(c, http.StatusBadRequest, errors.New("invalid request format"))
 		return
 	}
-	internal.Server.Repo.CreateSubject(c, subject.Title)
+	utils.GetRepo(c).CreateSubject(c, subject.Title)
 	c.JSON(http.StatusOK, "ok")
 }

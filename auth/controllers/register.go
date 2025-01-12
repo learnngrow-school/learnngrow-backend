@@ -9,7 +9,6 @@ import (
 	"github.com/jinzhu/copier"
 
 	"learn-n-grow.dev/m/auth/models"
-	"learn-n-grow.dev/m/internal"
 
 	"learn-n-grow.dev/m/db/repository"
 	"learn-n-grow.dev/m/utils"
@@ -39,7 +38,7 @@ func CreateUser(c *gin.Context, isTeacher bool) {
 	// TODO: check middlename type
 	params := repository.CreateUserParams{
 		IsTeacher: pgtype.Bool{Bool: isTeacher, Valid: true},
-		Slug: utils.GetSlug(6),
+		Slug:      utils.GetSlug(6),
 	}
 	copier.Copy(&params, &user)
 
@@ -48,7 +47,7 @@ func CreateUser(c *gin.Context, isTeacher bool) {
 		return
 	}
 
-	_, err = internal.Server.Repo.CreateUser(context.Background(), params)
+	_, err = utils.GetRepo(c).CreateUser(context.Background(), params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return
@@ -59,4 +58,3 @@ func CreateUser(c *gin.Context, isTeacher bool) {
 
 	c.JSON(http.StatusCreated, userGet)
 }
-

@@ -1,13 +1,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -16,7 +14,6 @@ import (
 	"learn-n-grow.dev/m/admin"
 	"learn-n-grow.dev/m/cmd"
 	"learn-n-grow.dev/m/courses"
-	"learn-n-grow.dev/m/db/repository"
 	_ "learn-n-grow.dev/m/docs"
 	"learn-n-grow.dev/m/internal/middlewares"
 	"learn-n-grow.dev/m/lessons"
@@ -33,6 +30,7 @@ func startServer() {
 	r := gin.Default()
 	r.Use(middlewares.CORSMiddleware())
 	r.Use(middlewares.JWTMiddleware())
+	r.Use(middlewares.DbMiddleware())
 	utils.SetupSlugs()
 
 	v1 := r.Group("/api/v1")
@@ -60,18 +58,17 @@ func startServer() {
 // @basepath /api/v1
 func main() {
 	godotenv.Load()
-	ctx := context.Background()
+	// ctx := context.Background()
 
-	conn, err := pgx.Connect(ctx, os.Getenv("DATABASE_URL"))
+	// conn, err := pgx.Connect(ctx, os.Getenv("DATABASE_URL"))
 
-	if err != nil {
-		panic(err)
-	}
+	// if err != nil {
+	// panic(err)
+	// }
 
-	repo := repository.New(conn)
+	// repo := repository.New(conn)
 	internal.Server = &internal.Config{
-		Repo:   repo,
-		Conn:   conn,
+		// Repo:   repo,
 		Domain: "localhost",
 	}
 

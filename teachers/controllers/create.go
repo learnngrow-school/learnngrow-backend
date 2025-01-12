@@ -9,7 +9,6 @@ import (
 	"github.com/jinzhu/copier"
 	auth "learn-n-grow.dev/m/auth/models"
 	"learn-n-grow.dev/m/db/repository"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
@@ -47,7 +46,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	id, err := internal.Server.Repo.CreateTeacher(context.Background(), params)
+	id, err := utils.GetRepo(c).CreateTeacher(context.Background(), params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return

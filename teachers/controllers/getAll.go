@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 
 	models "learn-n-grow.dev/m/teachers/models"
@@ -20,7 +19,7 @@ import (
 // @success 200 {object} TeachersGet
 // @router  /teachers/ [get]
 func GetAll(c *gin.Context) {
-	teachers, err := internal.Server.Repo.GetAllTeachers(context.Background())
+	teachers, err := utils.GetRepo(c).GetAllTeachers(context.Background())
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return

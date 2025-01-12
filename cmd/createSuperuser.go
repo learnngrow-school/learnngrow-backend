@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"context"
+	"os"
 
+	"github.com/jackc/pgx/v5"
 	"learn-n-grow.dev/m/auth/utils"
-	"learn-n-grow.dev/m/internal"
+	"learn-n-grow.dev/m/db/repository"
 )
 
 func CreateSuperuser(password string) (err error) {
@@ -13,6 +15,14 @@ func CreateSuperuser(password string) (err error) {
 		return err
 	}
 
-	err = internal.Server.Repo.CreateSuperuser(context.Background(), pass)
+	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+
+	if err != nil {
+		panic(err)
+	}
+
+	repo := repository.New(conn)
+
+	err = repo.CreateSuperuser(context.Background(), pass)
 	return err
 }
