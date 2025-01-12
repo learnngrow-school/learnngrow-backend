@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/rs/zerolog"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -31,6 +32,7 @@ func startServer() {
 	r.Use(middlewares.CORSMiddleware())
 	r.Use(middlewares.JWTMiddleware())
 	r.Use(middlewares.DbMiddleware())
+	r.Use(middlewares.LoggerMiddleware())
 	utils.SetupSlugs()
 
 	v1 := r.Group("/api/v1")
@@ -58,17 +60,10 @@ func startServer() {
 // @basepath /api/v1
 func main() {
 	godotenv.Load()
-	// ctx := context.Background()
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
-	// conn, err := pgx.Connect(ctx, os.Getenv("DATABASE_URL"))
-
-	// if err != nil {
-	// panic(err)
-	// }
-
-	// repo := repository.New(conn)
 	internal.Server = &internal.Config{
-		// Repo:   repo,
 		Domain: "localhost",
 	}
 
