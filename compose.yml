@@ -20,8 +20,12 @@ services:
       - db
     networks:
       - lng_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`api.learnngrow.ru`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
 
 networks:
   lng_network:
     driver: bridge
-
