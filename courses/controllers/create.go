@@ -19,6 +19,7 @@ import (
 // @produce json
 // @param   user body courses.CourseCreate true "Course"
 // @tags    Courses
+// @tags    By admin
 // @success 201 {object} courses.Course
 // @router  /courses/ [post]
 func CreateCourse(c *gin.Context) {

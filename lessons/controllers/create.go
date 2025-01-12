@@ -18,7 +18,8 @@ import (
 // @produce json
 // @param   user body models.LessonCreate true "User"
 // @tags    Lessons
-// @tags    by teacher
+// @tags    By teacher
+// @tags    By admin
 // @success 201 {object} models.LessonGet
 // @router  /lessons/ [post]
 func Create(c *gin.Context) {

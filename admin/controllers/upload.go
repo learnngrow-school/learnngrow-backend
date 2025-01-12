@@ -17,8 +17,8 @@ type Slug struct {
 // @produce   json
 // @param     file formData file true "File"
 // @tags      Files
-// @tags      _ By admin
-// @tags      _ By teacher
+// @tags      By admin
+// @tags      By teacher
 // @success   201 {object} Slug
 // @router    /admin/files [post]
 func UploadFile(c *gin.Context) {

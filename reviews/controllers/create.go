@@ -18,6 +18,7 @@ import (
 // @produce json
 // @param   user body ReviewCreate true "User"
 // @tags    Reviews
+// @tags    By admin
 // @success 201 {object} ReviewGet
 // @router  /reviews/ [post]
 func Create(c *gin.Context) {

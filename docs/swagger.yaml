@@ -217,8 +217,8 @@ paths:
       summary: Upload a file
       tags:
       - Files
-      - _ By admin
-      - _ By teacher
+      - By admin
+      - By teacher
   /admin/subjects:
     get:
       produces:
@@ -358,6 +358,7 @@ paths:
       summary: Create a course
       tags:
       - Courses
+      - By admin
   /courses/{slug}:
     get:
       consumes:
@@ -399,7 +400,8 @@ paths:
       summary: Create a lesson
       tags:
       - Lessons
-      - by teacher
+      - By teacher
+      - By admin
   /lessons/{week}:
     get:
       consumes:
@@ -420,8 +422,8 @@ paths:
       summary: Get all user's lessons
       tags:
       - Lessons
-      - by teacher
-      - by student
+      - By teacher
+      - By student
   /ping:
     get:
       description: |-
@@ -495,6 +497,7 @@ paths:
       summary: Create review
       tags:
       - Reviews
+      - By admin
   /students/:
     get:
       produces:
@@ -509,8 +512,8 @@ paths:
       summary: Get all students
       tags:
       - Students
-      - _ By admin
-      - _ By teacher
+      - By admin
+      - By teacher
   /teachers/:
     get:
       consumes:
@@ -543,6 +546,7 @@ paths:
       summary: Create teacher
       tags:
       - Teachers
+      - By admin
   /teachers/{slug}:
     get:
       consumes:

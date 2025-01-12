@@ -18,6 +18,7 @@ import (
 // @produce json
 // @param   user body auth.UserCreate true "User"
 // @tags    Teachers
+// @tags    By admin
 // success  201 {object} int
 // @router  /teachers/ [post]
 func Create(c *gin.Context) {

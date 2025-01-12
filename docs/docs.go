@@ -25,8 +25,8 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "Files",
-                    "_ By admin",
-                    "_ By teacher"
+                    "By admin",
+                    "By teacher"
                 ],
                 "summary": "Upload a file",
                 "parameters": [
@@ -241,7 +241,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Courses"
+                    "Courses",
+                    "By admin"
                 ],
                 "summary": "Create a course",
                 "parameters": [
@@ -306,7 +307,8 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "Lessons",
-                    "by teacher"
+                    "By teacher",
+                    "By admin"
                 ],
                 "summary": "Create a lesson",
                 "parameters": [
@@ -340,8 +342,8 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "Lessons",
-                    "by teacher",
-                    "by student"
+                    "By teacher",
+                    "By student"
                 ],
                 "summary": "Get all user's lessons",
                 "parameters": [
@@ -415,7 +417,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Reviews"
+                    "Reviews",
+                    "By admin"
                 ],
                 "summary": "Create review",
                 "parameters": [
@@ -446,8 +449,8 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "Students",
-                    "_ By admin",
-                    "_ By teacher"
+                    "By admin",
+                    "By teacher"
                 ],
                 "summary": "Get all students",
                 "responses": {
@@ -495,7 +498,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Teachers"
+                    "Teachers",
+                    "By admin"
                 ],
                 "summary": "Create teacher",
                 "parameters": [

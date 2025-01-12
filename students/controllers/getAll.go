@@ -13,8 +13,8 @@ import (
 // @summary Get all students
 // @produce json
 // @tags    Students
-// @tags    _ By admin
-// @tags    _ By teacher
+// @tags    By admin
+// @tags    By teacher
 // @success 200 {object} []auth.UserGet
 // @router  /students/ [get]
 func GetAll(c *gin.Context) {
