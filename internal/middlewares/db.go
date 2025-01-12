@@ -2,7 +2,6 @@ package middlewares
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -40,7 +39,6 @@ func DbMiddleware() gin.HandlerFunc {
 		defer conn.Release()
 
 		repo := repository.New(conn)
-		fmt.Printf("%v %t", repo, repo)
 
 		c.Set("repo", repo)
 		c.Next()
