@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"learn-n-grow.dev/m/db/repository"
-	"learn-n-grow.dev/m/internal"
 )
 
 func sanitizeFilename(filename string) string {
@@ -45,6 +44,6 @@ func Upload(c *gin.Context, file *multipart.FileHeader) (string, error) {
 		Slug:  slug,
 	}
 
-	internal.Server.Repo.UploadFile(c, params)
+	GetRepo(c).UploadFile(c, params)
 	return slug, nil
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"learn-n-grow.dev/m/courses/models"
-	"learn-n-grow.dev/m/internal"
+	"learn-n-grow.dev/m/utils"
 )
 
 // GetAllCourses Gets All courses
@@ -18,7 +18,7 @@ import (
 // @success 200 {object} courses.CoursesGet
 // @router  /courses/ [get]
 func GetAllCourses(c *gin.Context) {
-	coursesQuery, _ := internal.Server.Repo.GetAllCourses(context.Background())
+	coursesQuery, _ := utils.GetRepo(c).GetAllCourses(context.Background())
 
 	var coursesRes courses.CoursesGet
 

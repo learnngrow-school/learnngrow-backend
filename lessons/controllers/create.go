@@ -8,7 +8,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jinzhu/copier"
 	"learn-n-grow.dev/m/db/repository"
-	"learn-n-grow.dev/m/internal"
 	models "learn-n-grow.dev/m/lessons/models"
 	"learn-n-grow.dev/m/utils"
 )
@@ -32,7 +31,7 @@ func Create(c *gin.Context) {
 	}
 
 	params := GetCreateLessonParams(lesson)
-	result, err := internal.Server.Repo.CreateLesson(c, params)
+	result, err := utils.GetRepo(c).CreateLesson(c, params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return

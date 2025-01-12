@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
@@ -30,7 +29,7 @@ func checkTeacher(c *gin.Context) (bool, error) {
 		return false, err
 	}
 
-	user, err := internal.Server.Repo.GetUser(c, email.(string))
+	user, err := utils.GetRepo(c).GetUser(c, email.(string))
 	if err != nil {
 		return false, err
 	}

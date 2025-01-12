@@ -32,7 +32,7 @@ func Login(c *gin.Context) {
 	}
 
 	var record repository.User
-	record, err := internal.Server.Repo.GetUser(context.Background(), loginData.Email)
+	record, err := utils.GetRepo(c).GetUser(context.Background(), loginData.Email)
 	if err != nil {
 		err := errors.New("User not found")
 		utils.Throw(c, http.StatusUnauthorized, err)

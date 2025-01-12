@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 
 	models "learn-n-grow.dev/m/teachers/models"
@@ -27,7 +26,7 @@ func GetOne(c *gin.Context) {
 	// 	utils.Throw(c, http.StatusUnprocessableEntity, err)
 	// }
 
-	teacher, err := internal.Server.Repo.GetTeacherBySlug(context.Background(), slugParam)
+	teacher, err := utils.GetRepo(c).GetTeacherBySlug(context.Background(), slugParam)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return

@@ -1,13 +1,11 @@
 package internal
 
 import (
-	"github.com/jackc/pgx/v5"
-	"learn-n-grow.dev/m/db/repository"
+// "learn-n-grow.dev/m/db/repository"
 )
 
 type Config struct {
-	Repo *repository.Queries
-	Conn *pgx.Conn
+	// Repo   *repository.Queries
 	Domain string
 }
 

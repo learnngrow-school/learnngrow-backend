@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"learn-n-grow.dev/m/db/repository"
-	"learn-n-grow.dev/m/internal"
 	models "learn-n-grow.dev/m/lessons/models"
 	"learn-n-grow.dev/m/utils"
 )
@@ -39,7 +38,7 @@ func GetMy(c *gin.Context) {
 		Email: email,
 		Weeks: int32(timeframe),
 	}
-	lessonsDb, err := internal.Server.Repo.GetLessonsByUser(c, params)
+	lessonsDb, err := utils.GetRepo(c).GetLessonsByUser(c, params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return

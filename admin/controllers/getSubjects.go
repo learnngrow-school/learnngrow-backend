@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	models "learn-n-grow.dev/m/admin/models"
-	"learn-n-grow.dev/m/internal"
+	"learn-n-grow.dev/m/utils"
 )
 
 // CreateSubject Get list of subjects
@@ -16,7 +16,7 @@ import (
 // @success 200 {object} []models.Subject
 // @router  /admin/subjects [get]
 func GetSubjects(c *gin.Context) {
-	subjectDb, _ := internal.Server.Repo.GetSubjects(c)
+	subjectDb, _ := utils.GetRepo(c).GetSubjects(c)
 	var subjects []models.Subject
 	copier.CopyWithOption(&subjects, &subjectDb, copier.Option{DeepCopy: true})
 	c.JSON(http.StatusOK, subjects)

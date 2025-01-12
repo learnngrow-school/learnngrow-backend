@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"learn-n-grow.dev/m/db/repository"
-	"learn-n-grow.dev/m/internal"
 	reviews "learn-n-grow.dev/m/reviews/models"
 	"learn-n-grow.dev/m/utils"
 )
@@ -39,7 +38,7 @@ func Create(c *gin.Context) {
 
 	var queryRes repository.SchoolReview
 
-	queryRes, err = internal.Server.Repo.CreateReview(context.Background(), params)
+	queryRes, err = utils.GetRepo(c).CreateReview(context.Background(), params)
 	if err != nil {
 		utils.Throw(c, http.StatusInternalServerError, err)
 		return

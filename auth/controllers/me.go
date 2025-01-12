@@ -10,7 +10,6 @@ import (
 
 	"learn-n-grow.dev/m/auth/models"
 	"learn-n-grow.dev/m/db/repository"
-	"learn-n-grow.dev/m/internal"
 	"learn-n-grow.dev/m/utils"
 )
 
@@ -35,7 +34,7 @@ func GetMe(c *gin.Context) {
 	}
 
 	var record repository.User
-	record, err = internal.Server.Repo.GetUser(context.Background(), email.(string))
+	record, err = utils.GetRepo(c).GetUser(context.Background(), email.(string))
 	if err != nil {
 		err := errors.New("No such user found")
 		utils.Throw(c, http.StatusUnauthorized, err)
