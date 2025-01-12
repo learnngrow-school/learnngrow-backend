@@ -63,8 +63,12 @@ func main() {
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
+	domain := "localhost"
+	if os.Getenv("ENV") == "prod" {
+		domain = "learnngrow.ru"
+	}
 	internal.Server = &internal.Config{
-		Domain: "localhost",
+		Domain: domain,
 	}
 
 	if len(os.Args) > 1 && os.Args[1] == "createsuperuser" {
